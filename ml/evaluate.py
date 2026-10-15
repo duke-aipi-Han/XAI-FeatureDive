@@ -12,7 +12,8 @@ import torch
 
 from ml.backgrounds import COLOR_NAMES, RGB, composite
 from ml.common import CLASSES, DEFAULT_CONFIG, ROOT, read_json, sha256, write_json
-from ml.data_loader import MANIFEST, load_split
+from ml.data_loader import MANIFEST, load_split, verify_config
+from ml.experiment import Experiment
 from ml.interpretability import margins, saliency
 from ml.train import configure, load_checkpoint
 
@@ -61,10 +62,25 @@ def verify_swap_geometry(drawings: torch.Tensor) -> dict:
     return {"drawings_checked": len(drawings), "unchanged_alpha": True, "max_counterfactual_formula_error": maximum_error}
 
 
-def evaluate_model(regime: str, config: dict, drawings, labels, samples) -> tuple[dict, list[dict], list[dict]]:
-    model_path = ROOT / "checkpoints" / f"pilot-{regime}.pt"
-    model, checkpoint = load_checkpoint(model_path)
+def evaluate_model(
+    regime: str, config: dict, drawings, labels, samples,
+    *, model_path: Path | None = None, manifest_path: Path | None = None,
+    output_dir: Path | None = None,
+) -> tuple[dict, list[dict], list[dict]]:
+    model_path = ROOT / 'checkpoints' / f'pilot-{regime}.pt' if model_path is None else model_path
+    output_dir = OUTPUT if output_dir is None else output_dir
+    model, checkpoint = load_checkpoint(model_path) if manifest_path is None else load_checkpoint(model_path, manifest_path)
+    if manifest_path is not None and checkpoint['metadata']['config'] != config:
+        raise ValueError('Checkpoint and evaluation configurations differ')
     logits = torch.stack([predict(model, drawings, color, config['batch_size']) for color in range(4)], dim=1)
+    checks = {}
+    if manifest_path is not None:
+        assert not model.training and all(parameter.device.type == 'cpu' for parameter in model.parameters())
+        repeated = torch.stack([predict(model, drawings, color, config['batch_size']) for color in range(4)], dim=1)
+        torch.testing.assert_close(logits, repeated, atol=0, rtol=0)
+        if not bool(torch.isfinite(logits).all()):
+            raise ValueError('Checkpoint produced nonfinite logits')
+        checks = {'cpu_eval_mode': True, 'all_parameters_cpu': True, 'repeat_inference_exact': True, 'finite_logits': True, 'source_color_inputs_checked': len(labels) * 4}
     predictions = logits.argmax(2)
     probabilities = logits.softmax(2)
     correct = predictions.eq(labels[:, None]).numpy()
@@ -99,6 +115,7 @@ def evaluate_model(regime: str, config: dict, drawings, labels, samples) -> tupl
         "any_color_flip_rate": ci(any_flip), "pairwise_color_flip_rate": ci(pair_flip),
         "target_margin_range": ci(margin_range), "target_probability_range": ci(probability_range),
         "confusion_matrices": confusion,
+        "inference_checks": checks,
     }
     rows = []
     for index, sample in enumerate(samples):
@@ -122,7 +139,7 @@ def evaluate_model(regime: str, config: dict, drawings, labels, samples) -> tupl
                 "target_margin_change": float(target_margins[index, second] - target_margins[index, first]),
                 "target_probability_change": float(target_probabilities[index, second] - target_probabilities[index, first]),
             })
-    np.savez_compressed(OUTPUT / f"paired-{regime}.npz", logits=logits.numpy(), labels=labels.numpy(), sample_ids=np.array([sample['id'] for sample in samples]))
+    np.savez_compressed(output_dir / f"paired-{regime}.npz", logits=logits.numpy(), labels=labels.numpy(), sample_ids=np.array([sample['id'] for sample in samples]))
     return summary, rows, swaps
 
 
@@ -196,36 +213,54 @@ def main() -> None:
     parser.add_argument('--config', type=Path, default=DEFAULT_CONFIG)
     args = parser.parse_args()
     config = read_json(args.config)
+    experiment = Experiment.from_config(config)
     configure(config['training_seed'], config['threads'])
-    OUTPUT.mkdir(parents=True, exist_ok=True)
-    drawings, labels, samples = load_split('test')
+    output_dir = experiment.results
+    output_dir.mkdir(parents=True, exist_ok=True)
+    verify_config(read_json(experiment.manifest), config)
+    if experiment.phase == 1:
+        for regime in ('balanced', 'shortcut'):
+            training = read_json(output_dir / f'training-{regime}.json')
+            if training['status'] != 'complete' or training['config'] != config:
+                raise ValueError('Both recorded training runs must be complete and use this configuration')
+            if training['checkpoint_sha256'] != sha256(experiment.checkpoint(regime)):
+                raise ValueError('Training log and checkpoint hashes differ')
+    drawings, labels, samples = load_split('test', experiment.manifest)
     checks = verify_swap_geometry(drawings)
     results, rows, swaps = [], [], []
     for regime in ('balanced', 'shortcut'):
-        result, model_rows, model_swaps = evaluate_model(regime, config, drawings, labels, samples)
+        result, model_rows, model_swaps = evaluate_model(
+            regime, config, drawings, labels, samples, model_path=experiment.checkpoint(regime),
+            manifest_path=experiment.manifest, output_dir=output_dir,
+        )
         results.append(result)
         rows.extend(model_rows)
         swaps.extend(model_swaps)
         print(f"{regime}: balanced-color accuracy={result['accuracy']['balanced_colors']['mean']:.4f}, any-color flip rate={result['any_color_flip_rate']['mean']:.4f}", flush=True)
-    save_csv(OUTPUT / 'predictions.csv', rows)
-    save_csv(OUTPUT / 'background-swaps.csv', swaps)
-    paired = [np.load(OUTPUT / f'paired-{regime}.npz') for regime in ('balanced', 'shortcut')]
+    save_csv(output_dir / 'predictions.csv', rows)
+    save_csv(output_dir / 'background-swaps.csv', swaps)
+    paired = [np.load(output_dir / f'paired-{regime}.npz') for regime in ('balanced', 'shortcut')]
     flip = [(data['logits'][:, :3].argmax(2) != data['logits'][:, :1].argmax(2)).any(1).astype(float) for data in paired]
     paired_difference = estimate(flip[1] - flip[0], config['split_seed'], config['bootstrap_replicates'])
     summary = {
-        'schema_version': 1, 'config': config, 'manifest_sha256': sha256(MANIFEST),
+        'schema_version': 2, 'config': config, 'model_version': experiment.version,
+        'manifest': str(experiment.manifest.relative_to(ROOT)), 'manifest_sha256': sha256(experiment.manifest),
         'class_order': list(CLASSES), 'background_names': list(COLOR_NAMES), 'background_rgb': RGB,
-        'foreground_checks': checks, 'ci_method': '1000 percentile bootstrap replicates resampling source drawings; all matched colors and both models stay paired',
+        'foreground_checks': checks, 'ci_method': f"{config['bootstrap_replicates']} percentile bootstrap replicates resampling source drawings; all matched colors and both models stay paired",
         'color_comparison_scope': 'three training colors; neutral gray reported separately',
         'models': results, 'shortcut_minus_balanced_any_color_flip_rate': paired_difference,
         'environment': {'python': platform.python_version(), 'torch': str(torch.__version__), 'numpy': np.__version__},
     }
-    write_json(OUTPUT / 'summary.json', summary)
-    examples = illustrative_examples(config, drawings, labels, samples)
-    write_json(OUTPUT / 'examples.json', examples)
-    from ml.figures import create_figures, create_report
-    create_figures(OUTPUT, summary, examples)
-    create_report(OUTPUT, summary, examples)
+    write_json(output_dir / 'summary.json', summary)
+    if experiment.phase == 0:
+        examples = illustrative_examples(config, drawings, labels, samples)
+        write_json(output_dir / 'examples.json', examples)
+        from ml.figures import create_figures, create_report
+        create_figures(output_dir, summary, examples)
+        create_report(output_dir, summary, examples)
+    else:
+        from ml.phase1_report import create_report
+        create_report(experiment, summary)
 
 
 if __name__ == '__main__':

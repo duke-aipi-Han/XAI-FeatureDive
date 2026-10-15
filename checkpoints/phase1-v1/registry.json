@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "model_version": "phase1-v1",
+  "manifest": "data/manifests/phase1-v1.json",
+  "manifest_sha256": "de573795c4dbeedff947e25fd33db228e8ddc2020cacc38f82ca3723eb64f159",
+  "class_order": [
+    "cat",
+    "fish",
+    "airplane"
+  ],
+  "background_names": [
+    "green",
+    "blue",
+    "yellow",
+    "gray"
+  ],
+  "background_rgb": [
+    [
+      70,
+      170,
+      90
+    ],
+    [
+      65,
+      120,
+      210
+    ],
+    [
+      230,
+      195,
+      55
+    ],
+    [
+      128,
+      128,
+      128
+    ]
+  ],
+  "input": {
+    "shape_chw": [
+      3,
+      28,
+      28
+    ],
+    "dtype": "float32",
+    "range": [
+      0,
+      1
+    ],
+    "foreground": "white",
+    "alpha": "source intensity / 255"
+  },
+  "models": [
+    {
+      "id": "balanced",
+      "checkpoint": "checkpoints/phase1-v1/balanced.pt",
+      "checkpoint_sha256": "bdee90c13b557e085b004abddba7241afd84408389d581efc54c26c47df5e131",
+      "weights_sha256": "3c47a7624cc4e824b5b98b153f76804da2cf8fcb8cec5f9cc4c300cbfae84d5d",
+      "parameter_count": 26611,
+      "training_device": "mps",
+      "inference_device": "cpu",
+      "selected_epoch": 19
+    },
+    {
+      "id": "shortcut",
+      "checkpoint": "checkpoints/phase1-v1/shortcut.pt",
+      "checkpoint_sha256": "32b2dcce6f718557123188b30f5e1d1a6c3c9cb5c08fb0f3a895789c5f149124",
+      "weights_sha256": "1f3612bdb7a458379799b1d19fcf882551c34fc8f5393ea40dd77eebba527bfa",
+      "parameter_count": 26611,
+      "training_device": "mps",
+      "inference_device": "cpu",
+      "selected_epoch": 20
+    }
+  ]
+}

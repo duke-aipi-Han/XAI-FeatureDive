@@ -1,0 +1,439 @@
+{
+  "schema_version": 2,
+  "config": {
+    "schema_version": 1,
+    "phase": 1,
+    "model_version": "phase1-v1",
+    "manifest": "data/manifests/phase1-v1.json",
+    "exclude_manifests": [
+      "data/manifests/pilot-v1.json"
+    ],
+    "checkpoint_directory": "checkpoints/phase1-v1",
+    "results_directory": "results/phase1",
+    "device": "auto",
+    "split_seed": 1590,
+    "training_seed": 1590,
+    "background_seed": 1591,
+    "train_per_class": 8000,
+    "validation_per_class": 1000,
+    "test_per_class": 1000,
+    "epochs": 20,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "threads": 4,
+    "bootstrap_replicates": 1000
+  },
+  "model_version": "phase1-v1",
+  "manifest": "data/manifests/phase1-v1.json",
+  "manifest_sha256": "de573795c4dbeedff947e25fd33db228e8ddc2020cacc38f82ca3723eb64f159",
+  "class_order": [
+    "cat",
+    "fish",
+    "airplane"
+  ],
+  "background_names": [
+    "green",
+    "blue",
+    "yellow",
+    "gray"
+  ],
+  "background_rgb": [
+    [
+      70,
+      170,
+      90
+    ],
+    [
+      65,
+      120,
+      210
+    ],
+    [
+      230,
+      195,
+      55
+    ],
+    [
+      128,
+      128,
+      128
+    ]
+  ],
+  "foreground_checks": {
+    "drawings_checked": 3000,
+    "unchanged_alpha": true,
+    "max_counterfactual_formula_error": 1.1920928955078125e-07
+  },
+  "ci_method": "1000 percentile bootstrap replicates resampling source drawings; all matched colors and both models stay paired",
+  "color_comparison_scope": "three training colors; neutral gray reported separately",
+  "models": [
+    {
+      "regime": "balanced",
+      "checkpoint_sha256": "bdee90c13b557e085b004abddba7241afd84408389d581efc54c26c47df5e131",
+      "checkpoint": "checkpoints/phase1-v1/balanced.pt",
+      "best_epoch": 19,
+      "validation_accuracy": 0.9195555555555556,
+      "source_drawings": 3000,
+      "accuracy": {
+        "balanced_colors": {
+          "mean": 0.9074444444444445,
+          "ci95": [
+            0.8971111111111112,
+            0.9173361111111111
+          ]
+        },
+        "training_like_expected": {
+          "mean": 0.9074444444444445,
+          "ci95": [
+            0.8971111111111112,
+            0.9173361111111111
+          ]
+        },
+        "preferred_mapping": {
+          "mean": 0.9096666666666666,
+          "ci95": [
+            0.899,
+            0.9200083333333333
+          ]
+        },
+        "swapped_mapping_1": {
+          "mean": 0.9063333333333333,
+          "ci95": [
+            0.8953333333333333,
+            0.9166666666666666
+          ]
+        },
+        "swapped_mapping_2": {
+          "mean": 0.9063333333333333,
+          "ci95": [
+            0.8959916666666667,
+            0.9163333333333333
+          ]
+        },
+        "green": {
+          "mean": 0.9106666666666666,
+          "ci95": [
+            0.9,
+            0.9203416666666666
+          ]
+        },
+        "blue": {
+          "mean": 0.9043333333333333,
+          "ci95": [
+            0.8936666666666667,
+            0.9150083333333333
+          ]
+        },
+        "yellow": {
+          "mean": 0.9073333333333333,
+          "ci95": [
+            0.8969916666666666,
+            0.917
+          ]
+        },
+        "gray": {
+          "mean": 0.912,
+          "ci95": [
+            0.9016583333333333,
+            0.9220083333333333
+          ]
+        }
+      },
+      "any_color_flip_rate": {
+        "mean": 0.027,
+        "ci95": [
+          0.021,
+          0.03266666666666666
+        ]
+      },
+      "pairwise_color_flip_rate": {
+        "mean": 0.017999999999999995,
+        "ci95": [
+          0.014,
+          0.021777777777777778
+        ]
+      },
+      "target_margin_range": {
+        "mean": 1.2014042110815644,
+        "ci95": [
+          1.1728519271703437,
+          1.230353878197074
+        ]
+      },
+      "target_probability_range": {
+        "mean": 0.03706053831498745,
+        "ci95": [
+          0.03535256930378303,
+          0.03879265944673868
+        ]
+      },
+      "confusion_matrices": {
+        "green": [
+          [
+            880,
+            38,
+            82
+          ],
+          [
+            40,
+            912,
+            48
+          ],
+          [
+            34,
+            26,
+            940
+          ]
+        ],
+        "blue": [
+          [
+            864,
+            40,
+            96
+          ],
+          [
+            42,
+            906,
+            52
+          ],
+          [
+            33,
+            24,
+            943
+          ]
+        ],
+        "yellow": [
+          [
+            864,
+            41,
+            95
+          ],
+          [
+            36,
+            915,
+            49
+          ],
+          [
+            30,
+            27,
+            943
+          ]
+        ],
+        "gray": [
+          [
+            886,
+            39,
+            75
+          ],
+          [
+            44,
+            915,
+            41
+          ],
+          [
+            36,
+            29,
+            935
+          ]
+        ]
+      },
+      "inference_checks": {
+        "cpu_eval_mode": true,
+        "all_parameters_cpu": true,
+        "repeat_inference_exact": true,
+        "finite_logits": true,
+        "source_color_inputs_checked": 12000
+      }
+    },
+    {
+      "regime": "shortcut",
+      "checkpoint_sha256": "32b2dcce6f718557123188b30f5e1d1a6c3c9cb5c08fb0f3a895789c5f149124",
+      "checkpoint": "checkpoints/phase1-v1/shortcut.pt",
+      "best_epoch": 20,
+      "validation_accuracy": 0.7806666666666666,
+      "source_drawings": 3000,
+      "accuracy": {
+        "balanced_colors": {
+          "mean": 0.7716666666666666,
+          "ci95": [
+            0.7606638888888889,
+            0.782111111111111
+          ]
+        },
+        "training_like_expected": {
+          "mean": 0.9513,
+          "ci95": [
+            0.94615,
+            0.9557204166666666
+          ]
+        },
+        "preferred_mapping": {
+          "mean": 0.983,
+          "ci95": [
+            0.978,
+            0.9873333333333333
+          ]
+        },
+        "swapped_mapping_1": {
+          "mean": 0.65,
+          "ci95": [
+            0.6329916666666667,
+            0.6673333333333333
+          ]
+        },
+        "swapped_mapping_2": {
+          "mean": 0.682,
+          "ci95": [
+            0.6643333333333333,
+            0.699
+          ]
+        },
+        "green": {
+          "mean": 0.763,
+          "ci95": [
+            0.7483333333333333,
+            0.778
+          ]
+        },
+        "blue": {
+          "mean": 0.733,
+          "ci95": [
+            0.7166666666666667,
+            0.7490166666666667
+          ]
+        },
+        "yellow": {
+          "mean": 0.819,
+          "ci95": [
+            0.8046666666666666,
+            0.8326666666666667
+          ]
+        },
+        "gray": {
+          "mean": 0.872,
+          "ci95": [
+            0.8593333333333333,
+            0.8843333333333333
+          ]
+        }
+      },
+      "any_color_flip_rate": {
+        "mean": 0.4096666666666667,
+        "ci95": [
+          0.391,
+          0.4273416666666667
+        ]
+      },
+      "pairwise_color_flip_rate": {
+        "mean": 0.33977777777777773,
+        "ci95": [
+          0.3244444444444444,
+          0.3554472222222222
+        ]
+      },
+      "target_margin_range": {
+        "mean": 5.3354786055882775,
+        "ci95": [
+          5.289727522194386,
+          5.380847058401505
+        ]
+      },
+      "target_probability_range": {
+        "mean": 0.3945593357429995,
+        "ci95": [
+          0.3827609398957284,
+          0.40637327295513626
+        ]
+      },
+      "confusion_matrices": {
+        "green": [
+          [
+            980,
+            15,
+            5
+          ],
+          [
+            177,
+            817,
+            6
+          ],
+          [
+            493,
+            15,
+            492
+          ]
+        ],
+        "blue": [
+          [
+            612,
+            357,
+            31
+          ],
+          [
+            7,
+            988,
+            5
+          ],
+          [
+            24,
+            377,
+            599
+          ]
+        ],
+        "yellow": [
+          [
+            630,
+            31,
+            339
+          ],
+          [
+            17,
+            846,
+            137
+          ],
+          [
+            7,
+            12,
+            981
+          ]
+        ],
+        "gray": [
+          [
+            838,
+            73,
+            89
+          ],
+          [
+            43,
+            929,
+            28
+          ],
+          [
+            83,
+            68,
+            849
+          ]
+        ]
+      },
+      "inference_checks": {
+        "cpu_eval_mode": true,
+        "all_parameters_cpu": true,
+        "repeat_inference_exact": true,
+        "finite_logits": true,
+        "source_color_inputs_checked": 12000
+      }
+    }
+  ],
+  "shortcut_minus_balanced_any_color_flip_rate": {
+    "mean": 0.38266666666666665,
+    "ci95": [
+      0.364325,
+      0.4
+    ]
+  },
+  "environment": {
+    "python": "3.11.15",
+    "torch": "2.14.1",
+    "numpy": "2.4.6"
+  }
+}

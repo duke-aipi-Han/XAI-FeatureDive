@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "phase": 1,
+  "model_version": "phase1-v1",
+  "manifest": "data/manifests/phase1-v1.json",
+  "exclude_manifests": ["data/manifests/pilot-v1.json"],
+  "checkpoint_directory": "checkpoints/phase1-v1",
+  "results_directory": "results/phase1",
+  "device": "auto",
+  "split_seed": 1590,
+  "training_seed": 1590,
+  "background_seed": 1591,
+  "train_per_class": 8000,
+  "validation_per_class": 1000,
+  "test_per_class": 1000,
+  "epochs": 20,
+  "batch_size": 256,
+  "learning_rate": 0.001,
+  "threads": 4,
+  "bootstrap_replicates": 1000
+}

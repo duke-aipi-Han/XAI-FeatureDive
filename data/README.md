@@ -1,40 +1,38 @@
-# Pilot data provenance
+# Data and provenance
 
-Attribution: **The Quick, Draw! Dataset, Google, Inc.**, available under
-[Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/).
+The [Phase 1 dataset card](../docs/data-card.md) documents source attribution,
+preprocessing, full-size partitions, color assignments, and known limitations.
+The Quick, Draw! Dataset is made available by **Google, Inc.** under
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 [Canonical dataset documentation](https://github.com/googlecreativelab/quickdraw-dataset).
 
-Source objects:
+| Experiment | Manifest | Sources per class: train / validation / test |
+| --- | --- | --- |
+| Phase 0 pilot | `manifests/pilot-v1.json` | 2,000 / 300 / 300 |
+| Phase 1 | `manifests/phase1-v1.json` | 8,000 / 1,000 / 1,000 |
+
+Both manifests are versioned and preserved. Phase 1 excludes every pilot source
+and exact bitmap copy, and rejects duplicates across all selected classes and
+splits. Source selection precedes color generation. Both model regimes share
+the same source splits within each experiment.
+
+```sh
+uv run --locked python -m ml.data_loader --config configs/phase1.json
+```
+
+Source files are stored in `raw/` and ignored by Git:
 
 - https://storage.googleapis.com/quickdraw_dataset/full/numpy_bitmap/cat.npy
 - https://storage.googleapis.com/quickdraw_dataset/full/numpy_bitmap/fish.npy
 - https://storage.googleapis.com/quickdraw_dataset/full/numpy_bitmap/airplane.npy
 
-Run `uv run --locked python -m ml.data_loader` to download them into `raw/`.
-They are uint8 arrays with 784 pixels per row: zero background and bright
-foreground. This project changes presentation by compositing white foreground
-strokes over RGB colors using intensity/255 as alpha, without resizing.
+The manifests record file URLs, SHA-256 checksums, byte sizes, row counts, seeds,
+source indices, exact bitmap hashes, partitions, and class labels. Source IDs
+such as `cat:28291` are zero-based row indices within a specific hashed array,
+not original QuickDraw key IDs. Original contributor metadata is unavailable.
 
-`manifests/pilot-v1.json` records the retrieval/selection timestamp, source URLs,
-file sizes and SHA-256 checksums, full category row counts, seed, selected source
-row indices and bitmap hashes, class labels, partitions, and skipped duplicate
-count. Class order is cat=0, fish=1, airplane=2.
-
-The pilot samples 2,000 training, 300 validation, and 300 test drawings per class
-from seeded full-file permutations. It rejects exact duplicate bitmaps across
-all selected rows before any backgrounds are generated. Both models reuse this
-single manifest. A frozen manifest is never silently replaced by a new split.
-Create a new versioned experiment before changing the selection protocol.
-
-Source IDs like `cat:28291` are zero-based row indices in a **specific hashed
-bitmap file**, not original QuickDraw key IDs. The bitmap format does not retain
-original key_id, contributor, recognition, country, or timestamp metadata.
-Disjoint source rows and exact pixel deduplication do not imply contributor-level
-independence or removal of near duplicates. The original dataset can contain
-ambiguous, mislabeled, or inappropriate drawings; examples require review before
-public presentation.
-
-The pilot is smaller than the final sampling target in the implementation plan.
-Do not mix its measured results with future final experiment results. Full
-source data is ignored by Git; preserve verified source copies for long-term
-replay if upstream URLs change.
+The preprocessing changes presentation by compositing white strokes over RGB
+backgrounds using intensity/255 as alpha, without resizing. Seeds, assignments,
+and color values are documented in the dataset card and experiment outputs.
+Full source arrays are not committed. Preserve verified copies for long-term
+replay if upstream files change. Final and pilot measurements remain separate.

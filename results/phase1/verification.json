@@ -1,0 +1,14 @@
+{
+  "manifest_sha256": "de573795c4dbeedff947e25fd33db228e8ddc2020cacc38f82ca3723eb64f159",
+  "unique_sources": 30000,
+  "pilot_overlap_sources": 0,
+  "pilot_overlap_bitmaps": 0,
+  "prediction_rows_audited": 24000,
+  "swap_rows_audited": 36000,
+  "training_assignments_audited": 48000,
+  "training_device": "mps",
+  "cpu_checkpoint_integrity": true,
+  "same_initial_weights": true,
+  "validation_epoch_selection_verified": true,
+  "phase0_artifacts_preserved": true
+}
