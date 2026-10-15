@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "registry": "checkpoints/phase1-v1/registry.json",
+  "demo_manifest": "data/manifests/demo-v1.json",
+  "demo_per_class": 8,
+  "threads": 4,
+  "max_body_bytes": 131072,
+  "requests_per_minute": 120,
+  "max_rate_clients": 1024
+}

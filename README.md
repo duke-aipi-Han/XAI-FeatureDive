@@ -8,14 +8,16 @@ The source of truth is [the implementation plan](FeatureDive-Codex-Implementatio
 
 ## Current status
 
-**Phase 1 is complete.** Both final models were trained on this computer’s MPS
+**Phase 2 is complete.** The CPU interpretability engine and validated FastAPI
+API now support activations, saliency, drawing erasure, fixed-color occlusion,
+channel ablation, and background swaps. Both final models were trained on this computer’s MPS
 accelerator using the full 30,000-source dataset (24,000 training, 3,000
 validation, 3,000 test). All pilot drawings and exact bitmap copies are excluded.
 Class order remains `cat = 0`, `fish = 1`, `airplane = 2`.
 
 Both versioned checkpoints load on CPU in eval mode. Repeating inference for all
 12,000 held-out source/color inputs per model produces exactly equal logits.
-API, frontend, and deployment work await their respective phases.
+Frontend and deployment work await their respective phases.
 
 | Phase 1 measurement | Balanced model | Shortcut model |
 | --- | ---: | ---: |
@@ -30,6 +32,39 @@ See the [dataset card](docs/data-card.md) and model cards for
 [shortcut](docs/model-cards/phase1-v1-shortcut.md).
 
 ![Phase 1 measured results](results/phase1/overview.png)
+
+## Run the Phase 2 API and challenge demonstrations
+
+```sh
+uv sync --locked --extra dev
+uv run --locked uvicorn backend.main:app --host 127.0.0.1 --port 8000
+```
+
+Visit `http://127.0.0.1:8000/docs` for endpoint schemas. In another terminal:
+
+```sh
+uv run --locked python -m experiments.phase2_demo
+uv run --locked pytest -q
+```
+
+The [Phase 2 report](docs/phase2-interpretability.md) demonstrates all three
+planned challenge concepts with actual scores, images, activation maps, and
+before/after interventions. It states example-selection rules, student learning
+objectives, reflection prompts, and a poster takeaway. These are curated
+teaching examples, not evidence of measured learning gains.
+
+The [API guide](docs/phase2-api.md) explains replay, reset/undo, operation
+composition, numerical units, and request bounds. A catalog of 24 illustrative
+training drawings and a small source-only bundle are included; validation and
+test data remain separate. Serving and report generation need no dataset
+download or MPS. To rebuild the catalog from full verified source arrays, run
+`uv run --locked python -m backend.catalog`.
+
+Endpoints include health/readiness, models/samples, infer, activations, saliency,
+and intervene. Requests explicitly define baseline model/sample/background and
+target class, plus an ordered bounded list of interventions. Server-side user
+sessions, arbitrary image/model uploads, frontend, and interactive challenge
+flows are not implemented in this phase.
 
 ## Set up and evaluate Phase 1
 
@@ -116,7 +151,9 @@ reproduce the recorded dependency versions.
 ## Layout
 
 ```text
-configs/phase{0,1}.json      Versioned experiment configurations
+configs/phase{0,1,2}.json    Training and serving configurations
+backend/                    Validated CPU API, stateless engine, source catalog
+experiments/phase2_demo.py   Reproducible challenge demonstrations
 ml/data_loader.py           Downloads, checksums, source manifest, split loading
 ml/backgrounds.py           Alpha compositing and training color assignments
 ml/model.py                 CNN with explicit post-ReLU activation/ablation taps
@@ -133,6 +170,7 @@ data/processed/             Reserved for derived datasets (ignored by Git)
 checkpoints/                Pilot checkpoints and phase1-v1 final checkpoints
 results/phase0/              Versioned pilot JSON, CSV, raw arrays, and PNGs
 results/phase1/              Final measured outputs and training assignments
+results/phase2/              Challenge scans, replay records, and figures
 docs/                       Phase reports, dataset card, and model cards
 ```
 
@@ -156,5 +194,5 @@ This project samples bitmap rows, composites white strokes over colored
 backgrounds, and generates intervention variants. See [data/README.md](data/README.md)
 for provenance and source-format limitations.
 
-**Stop after Phase 1:** review the full-size dataset and model results before
-authorizing Phase 2, as required by the implementation plan.
+**Stop after Phase 2:** review the engine, API, and challenge demonstrations
+before authorizing Phase 3 frontend development.

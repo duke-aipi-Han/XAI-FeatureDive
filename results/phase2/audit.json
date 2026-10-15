@@ -1,0 +1,13 @@
+{
+  "all_selected_records_replayed_exactly": true,
+  "candidate_row_counts": {
+    "saliency-patches.csv": 1176,
+    "channel-ablations.csv": 576,
+    "background-swaps.csv": 192
+  },
+  "prior_artifacts_preserved": 49,
+  "checkpoint_files_unchanged": true,
+  "source_partition": "train",
+  "validation_and_test_sources_used": 0,
+  "source_hashes_and_lock_match": true
+}

@@ -1,0 +1,201 @@
+{
+  "schema_version": 1,
+  "model_version": "phase1-v1",
+  "parent_manifest": "data/manifests/phase1-v1.json",
+  "parent_manifest_sha256": "de573795c4dbeedff947e25fd33db228e8ddc2020cacc38f82ca3723eb64f159",
+  "selection": "First 8 training sources per class in frozen manifest order; illustrative, seen during training; excludes validation and test sources",
+  "samples": [
+    {
+      "id": "cat:118179",
+      "class": "cat",
+      "label": 0,
+      "source_index": 118179,
+      "bitmap_sha256": "ebf546619e3768e8b95cc127c73cbc09dd445fda71a1fd48e56001f8989a4572",
+      "split": "train"
+    },
+    {
+      "id": "cat:2446",
+      "class": "cat",
+      "label": 0,
+      "source_index": 2446,
+      "bitmap_sha256": "a1e63a797aa3e85b9348826edf276a6eefffc67111a570b026f49543137cde14",
+      "split": "train"
+    },
+    {
+      "id": "cat:105890",
+      "class": "cat",
+      "label": 0,
+      "source_index": 105890,
+      "bitmap_sha256": "ffba76169c74d0e01048d09fa2e87609c523dafa7c55a1e85f3a72d58979ba84",
+      "split": "train"
+    },
+    {
+      "id": "cat:42173",
+      "class": "cat",
+      "label": 0,
+      "source_index": 42173,
+      "bitmap_sha256": "6515b271ce378882c3ed3bfd8894a48f61f84417c6412420b1c88083aeaf9743",
+      "split": "train"
+    },
+    {
+      "id": "cat:48729",
+      "class": "cat",
+      "label": 0,
+      "source_index": 48729,
+      "bitmap_sha256": "e8a9a98df045103871bc539106bf2eacdd6e65ac87a4df1221b22c8d8733cc1b",
+      "split": "train"
+    },
+    {
+      "id": "cat:87011",
+      "class": "cat",
+      "label": 0,
+      "source_index": 87011,
+      "bitmap_sha256": "72dde7a2fbb1734e5711e8414180d3b58ca4c49123dc5cd91782a765e376a74e",
+      "split": "train"
+    },
+    {
+      "id": "cat:51108",
+      "class": "cat",
+      "label": 0,
+      "source_index": 51108,
+      "bitmap_sha256": "841a3bf33d7ebe5c885e178349aee6edd82edc7b1e9049fb57d0453ce2c62de2",
+      "split": "train"
+    },
+    {
+      "id": "cat:89133",
+      "class": "cat",
+      "label": 0,
+      "source_index": 89133,
+      "bitmap_sha256": "483003be507787cff9a6e774854f5b9852478ccce384b79b905196bc3aafb088",
+      "split": "train"
+    },
+    {
+      "id": "fish:28229",
+      "class": "fish",
+      "label": 1,
+      "source_index": 28229,
+      "bitmap_sha256": "b92ea2d08b6478f40fc5d398cbf5408a7f2d952e8e874f4cf6620894246dc69f",
+      "split": "train"
+    },
+    {
+      "id": "fish:39682",
+      "class": "fish",
+      "label": 1,
+      "source_index": 39682,
+      "bitmap_sha256": "4b7159cc2772db5485a0b4d825608ab3747c57e40facf6bc123df66f2eb14043",
+      "split": "train"
+    },
+    {
+      "id": "fish:2756",
+      "class": "fish",
+      "label": 1,
+      "source_index": 2756,
+      "bitmap_sha256": "77c07a488677ec2a9e9265eecca87f954ae1425904bd0d18c287158db1515827",
+      "split": "train"
+    },
+    {
+      "id": "fish:20708",
+      "class": "fish",
+      "label": 1,
+      "source_index": 20708,
+      "bitmap_sha256": "9fb2c8c1b1605d83d60e38f8219b4c35599e8c79b80a25ec3902a04ada5abf96",
+      "split": "train"
+    },
+    {
+      "id": "fish:54763",
+      "class": "fish",
+      "label": 1,
+      "source_index": 54763,
+      "bitmap_sha256": "7df566d7d948234daddcd308e70c1188c90e39e674b7e51e1324f1032b8a9016",
+      "split": "train"
+    },
+    {
+      "id": "fish:64549",
+      "class": "fish",
+      "label": 1,
+      "source_index": 64549,
+      "bitmap_sha256": "8bdc76ab2495b86b6a9b3fbcfef71037b752f455a2af8fd5c581e31a93d907f0",
+      "split": "train"
+    },
+    {
+      "id": "fish:98414",
+      "class": "fish",
+      "label": 1,
+      "source_index": 98414,
+      "bitmap_sha256": "97b39e2fdfe546c6b27ec2f08cecf8fd60e05c8836ca4014ccc11ed3856eac30",
+      "split": "train"
+    },
+    {
+      "id": "fish:2617",
+      "class": "fish",
+      "label": 1,
+      "source_index": 2617,
+      "bitmap_sha256": "3fd52ebb5892338f31b21460bc25659ded0c1d313d83feacece3adc64139d1a7",
+      "split": "train"
+    },
+    {
+      "id": "airplane:65445",
+      "class": "airplane",
+      "label": 2,
+      "source_index": 65445,
+      "bitmap_sha256": "77f5e4c8130d4fdf31634bff4ae7f4da66ad226e506b2294247242f761454770",
+      "split": "train"
+    },
+    {
+      "id": "airplane:82245",
+      "class": "airplane",
+      "label": 2,
+      "source_index": 82245,
+      "bitmap_sha256": "035919675f29feee728add7f892f62a229d58c4f2aa4889aea1a148a099aaad8",
+      "split": "train"
+    },
+    {
+      "id": "airplane:112150",
+      "class": "airplane",
+      "label": 2,
+      "source_index": 112150,
+      "bitmap_sha256": "c56e413840253fc6ed8917414e2b977d440871ddeb57cce9ba0da5cc692d4e2f",
+      "split": "train"
+    },
+    {
+      "id": "airplane:4513",
+      "class": "airplane",
+      "label": 2,
+      "source_index": 4513,
+      "bitmap_sha256": "d1ca3896f37eb45aeae892893102afcd2203972a3934bd8edebadf1175e292f8",
+      "split": "train"
+    },
+    {
+      "id": "airplane:72939",
+      "class": "airplane",
+      "label": 2,
+      "source_index": 72939,
+      "bitmap_sha256": "4f4520b324e10f171f1a522763ef73cdd55f86ec0972acc72b0423ef3a50fbc3",
+      "split": "train"
+    },
+    {
+      "id": "airplane:9950",
+      "class": "airplane",
+      "label": 2,
+      "source_index": 9950,
+      "bitmap_sha256": "0455488c9fead5efa2a0d6054b8537bbeadafa6491b6bc92daa6c6cdc252ed76",
+      "split": "train"
+    },
+    {
+      "id": "airplane:142997",
+      "class": "airplane",
+      "label": 2,
+      "source_index": 142997,
+      "bitmap_sha256": "7a7300862401f3b2175b635214428b3a16c953f9b29ff3a8fa25dba861afa386",
+      "split": "train"
+    },
+    {
+      "id": "airplane:22272",
+      "class": "airplane",
+      "label": 2,
+      "source_index": 22272,
+      "bitmap_sha256": "44eb19d9780e77efaadda4c244ea6691d583466800d7cd956b32ae754fa3e722",
+      "split": "train"
+    }
+  ]
+}

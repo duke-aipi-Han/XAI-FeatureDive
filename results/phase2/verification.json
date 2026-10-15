@@ -1,0 +1,19 @@
+{
+  "reset_checks": 48,
+  "weights_unchanged": true,
+  "catalog_sources": 24,
+  "source_partition": "train",
+  "patch_rows": 1176,
+  "channel_rows": 576,
+  "background_rows": 192,
+  "dependency_lock_sha256": "0a62f7a43672c83fcee168be2fe9635e0411607b4439c9dbe3992e3752213c53",
+  "source_code_sha256": {
+    "backend/engine.py": "4ac66a0b4e971e948561839f87b58e14cbb348293736614d2d667d704b0bb262",
+    "backend/schemas.py": "f7be632f6c8efb22cb86da9cb6d30ac280b3b6dd8bf8607f80aa487a73320189",
+    "backend/catalog.py": "37d7a9984f7664fe4bf0956c9160dbe7acab1a51d3c862f986608e33c219a646",
+    "backend/main.py": "5818ff7991da85f10c9c9660bda76a4fec21d89396e77aff601d763a8af564c9",
+    "backend/limits.py": "d5f41e028916a40a252d1bfc595763e7764fa6023b8af3e6f5935ecb3c1dffe9",
+    "ml/interpretability.py": "4155818caae10de1788291b9954c4eef3fb31260ac1fb75e1725b5450c692a84",
+    "experiments/phase2_demo.py": "f401455e15c7e0345c01582570d0b2c589e6ed740d1e1a4cb023b11ba6f6d32f"
+  }
+}
