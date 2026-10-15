@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "split_seed": 590,
+  "training_seed": 590,
+  "background_seed": 591,
+  "train_per_class": 2000,
+  "validation_per_class": 300,
+  "test_per_class": 300,
+  "epochs": 12,
+  "batch_size": 128,
+  "learning_rate": 0.001,
+  "threads": 4,
+  "bootstrap_replicates": 1000
+}

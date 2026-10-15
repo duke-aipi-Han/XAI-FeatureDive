@@ -29,6 +29,8 @@ dist/
 !/data/processed/.gitkeep
 /checkpoints/*
 !/checkpoints/.gitkeep
+!/checkpoints/pilot-balanced.pt
+!/checkpoints/pilot-shortcut.pt
 /results/metrics/*
 !/results/metrics/.gitkeep
 /results/figures/*

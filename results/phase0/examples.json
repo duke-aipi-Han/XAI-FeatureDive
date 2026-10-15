@@ -1,0 +1,1148 @@
+[
+  {
+    "model": "balanced",
+    "checkpoint_sha256": "2d24a0a2df98bdfbe93c0ee106b0c856d842c9f5c0046fd7d3c2df51bd58e972",
+    "sample_id": "cat:28291",
+    "selection": "first manifest test drawing per class; illustrative, not curated",
+    "background": "green",
+    "baseline": {
+      "logits": [
+        3.443521022796631,
+        -0.3740009069442749,
+        -0.08996733278036118
+      ],
+      "probabilities": [
+        0.9513072967529297,
+        0.02091183140873909,
+        0.02778090350329876
+      ],
+      "predicted_class": "cat",
+      "target_class": "cat",
+      "target_logit_margin": 3.5334882736206055
+    },
+    "ablations": [
+      {
+        "layer": "conv1",
+        "channel": 2,
+        "selection": "highest mean post-ReLU activation",
+        "mean_activation": 1.4153069257736206,
+        "modified": {
+          "logits": [
+            2.8510169982910156,
+            -0.18194933235645294,
+            -0.19746291637420654
+          ],
+          "probabilities": [
+            0.9127389788627625,
+            0.04396894574165344,
+            0.043292086571455
+          ],
+          "predicted_class": "cat",
+          "target_class": "cat",
+          "target_logit_margin": 3.032966375350952
+        },
+        "target_margin_change": -0.5005218982696533
+      },
+      {
+        "layer": "conv2",
+        "channel": 8,
+        "selection": "highest mean post-ReLU activation",
+        "mean_activation": 3.5949912071228027,
+        "modified": {
+          "logits": [
+            3.1084790229797363,
+            -0.14561600983142853,
+            -0.37840065360069275
+          ],
+          "probabilities": [
+            0.935268223285675,
+            0.03611608222126961,
+            0.028615649789571762
+          ],
+          "predicted_class": "cat",
+          "target_class": "cat",
+          "target_logit_margin": 3.2540950775146484
+        },
+        "target_margin_change": -0.27939319610595703
+      }
+    ],
+    "occlusion": {
+      "type": "controlled_occlusion",
+      "rectangle_xywh": [
+        12,
+        12,
+        4,
+        4
+      ],
+      "replacement_rgb": [
+        128,
+        128,
+        128
+      ],
+      "affected_pixels": 16,
+      "modified": {
+        "logits": [
+          3.405484199523926,
+          -0.18751229345798492,
+          -0.31856074929237366
+        ],
+        "probabilities": [
+          0.9508849382400513,
+          0.026164313778281212,
+          0.022950690239667892
+        ],
+        "predicted_class": "cat",
+        "target_class": "cat",
+        "target_logit_margin": 3.592996597290039
+      }
+    },
+    "background_swaps": [
+      {
+        "background": "green",
+        "rgb": [
+          70,
+          170,
+          90
+        ],
+        "logits": [
+          3.443521022796631,
+          -0.3740009069442749,
+          -0.08996733278036118
+        ],
+        "probabilities": [
+          0.9513072967529297,
+          0.02091183140873909,
+          0.02778090350329876
+        ],
+        "predicted_class": "cat",
+        "target_class": "cat",
+        "target_logit_margin": 3.5334882736206055
+      },
+      {
+        "background": "blue",
+        "rgb": [
+          65,
+          120,
+          210
+        ],
+        "logits": [
+          3.070617198944092,
+          -0.38109028339385986,
+          0.11998409777879715
+        ],
+        "probabilities": [
+          0.9225109815597534,
+          0.02923573926091194,
+          0.04825339466333389
+        ],
+        "predicted_class": "cat",
+        "target_class": "cat",
+        "target_logit_margin": 2.9506330490112305
+      },
+      {
+        "background": "yellow",
+        "rgb": [
+          230,
+          195,
+          55
+        ],
+        "logits": [
+          3.022535800933838,
+          -0.3933953046798706,
+          0.13194888830184937
+        ],
+        "probabilities": [
+          0.918788731098175,
+          0.030178356915712357,
+          0.051032841205596924
+        ],
+        "predicted_class": "cat",
+        "target_class": "cat",
+        "target_logit_margin": 2.8905868530273438
+      },
+      {
+        "background": "gray",
+        "rgb": [
+          128,
+          128,
+          128
+        ],
+        "logits": [
+          3.2718443870544434,
+          -0.3877856135368347,
+          0.025420375168323517
+        ],
+        "probabilities": [
+          0.9392712712287903,
+          0.024178752675652504,
+          0.036549970507621765
+        ],
+        "predicted_class": "cat",
+        "target_class": "cat",
+        "target_logit_margin": 3.2464239597320557
+      }
+    ],
+    "raw_arrays": "example-balanced-cat.npz",
+    "checks": {
+      "repeat_inference_exact": true,
+      "reset_exact": true,
+      "ablation_injection_exact": true,
+      "saliency_finite_nonzero": true
+    }
+  },
+  {
+    "model": "balanced",
+    "checkpoint_sha256": "2d24a0a2df98bdfbe93c0ee106b0c856d842c9f5c0046fd7d3c2df51bd58e972",
+    "sample_id": "fish:95563",
+    "selection": "first manifest test drawing per class; illustrative, not curated",
+    "background": "blue",
+    "baseline": {
+      "logits": [
+        0.7550609111785889,
+        1.030931830406189,
+        0.23487171530723572
+      ],
+      "probabilities": [
+        0.34339648485183716,
+        0.4524858891963959,
+        0.20411764085292816
+      ],
+      "predicted_class": "fish",
+      "target_class": "fish",
+      "target_logit_margin": 0.2758709192276001
+    },
+    "ablations": [
+      {
+        "layer": "conv1",
+        "channel": 2,
+        "selection": "highest mean post-ReLU activation",
+        "mean_activation": 1.565279245376587,
+        "modified": {
+          "logits": [
+            0.5960714221000671,
+            1.1404378414154053,
+            -0.03935792297124863
+          ],
+          "probabilities": [
+            0.3073873519897461,
+            0.5297870635986328,
+            0.1628255546092987
+          ],
+          "predicted_class": "fish",
+          "target_class": "fish",
+          "target_logit_margin": 0.5443664193153381
+        },
+        "target_margin_change": 0.26849550008773804
+      },
+      {
+        "layer": "conv2",
+        "channel": 8,
+        "selection": "highest mean post-ReLU activation",
+        "mean_activation": 4.071037292480469,
+        "modified": {
+          "logits": [
+            0.7393675446510315,
+            0.7133134007453918,
+            0.06195256859064102
+          ],
+          "probabilities": [
+            0.4028666913509369,
+            0.3925058841705322,
+            0.2046273946762085
+          ],
+          "predicted_class": "cat",
+          "target_class": "fish",
+          "target_logit_margin": -0.02605414390563965
+        },
+        "target_margin_change": -0.30192506313323975
+      }
+    ],
+    "occlusion": {
+      "type": "controlled_occlusion",
+      "rectangle_xywh": [
+        12,
+        12,
+        4,
+        4
+      ],
+      "replacement_rgb": [
+        128,
+        128,
+        128
+      ],
+      "affected_pixels": 16,
+      "modified": {
+        "logits": [
+          0.9262060523033142,
+          1.4217733144760132,
+          -0.342602014541626
+        ],
+        "probabilities": [
+          0.3421615958213806,
+          0.5616340041160583,
+          0.09620439261198044
+        ],
+        "predicted_class": "fish",
+        "target_class": "fish",
+        "target_logit_margin": 0.495567262172699
+      }
+    },
+    "background_swaps": [
+      {
+        "background": "green",
+        "rgb": [
+          70,
+          170,
+          90
+        ],
+        "logits": [
+          0.8555132150650024,
+          1.0403671264648438,
+          -0.11601408571004868
+        ],
+        "probabilities": [
+          0.38736462593078613,
+          0.46601617336273193,
+          0.1466192603111267
+        ],
+        "predicted_class": "fish",
+        "target_class": "fish",
+        "target_logit_margin": 0.1848539113998413
+      },
+      {
+        "background": "blue",
+        "rgb": [
+          65,
+          120,
+          210
+        ],
+        "logits": [
+          0.7550609111785889,
+          1.030931830406189,
+          0.23487171530723572
+        ],
+        "probabilities": [
+          0.34339648485183716,
+          0.4524858891963959,
+          0.20411764085292816
+        ],
+        "predicted_class": "fish",
+        "target_class": "fish",
+        "target_logit_margin": 0.2758709192276001
+      },
+      {
+        "background": "yellow",
+        "rgb": [
+          230,
+          195,
+          55
+        ],
+        "logits": [
+          0.645944356918335,
+          1.1514382362365723,
+          0.06644416600465775
+        ],
+        "probabilities": [
+          0.310753732919693,
+          0.5151687860488892,
+          0.17407749593257904
+        ],
+        "predicted_class": "fish",
+        "target_class": "fish",
+        "target_logit_margin": 0.5054938793182373
+      },
+      {
+        "background": "gray",
+        "rgb": [
+          128,
+          128,
+          128
+        ],
+        "logits": [
+          0.750762939453125,
+          1.1065860986709595,
+          0.03028855472803116
+        ],
+        "probabilities": [
+          0.3431854248046875,
+          0.48984748125076294,
+          0.16696706414222717
+        ],
+        "predicted_class": "fish",
+        "target_class": "fish",
+        "target_logit_margin": 0.3558231592178345
+      }
+    ],
+    "raw_arrays": "example-balanced-fish.npz",
+    "checks": {
+      "repeat_inference_exact": true,
+      "reset_exact": true,
+      "ablation_injection_exact": true,
+      "saliency_finite_nonzero": true
+    }
+  },
+  {
+    "model": "balanced",
+    "checkpoint_sha256": "2d24a0a2df98bdfbe93c0ee106b0c856d842c9f5c0046fd7d3c2df51bd58e972",
+    "sample_id": "airplane:136522",
+    "selection": "first manifest test drawing per class; illustrative, not curated",
+    "background": "yellow",
+    "baseline": {
+      "logits": [
+        -0.8436269164085388,
+        -1.1084398031234741,
+        2.7593612670898438
+      ],
+      "probabilities": [
+        0.02599082887172699,
+        0.019944049417972565,
+        0.9540651440620422
+      ],
+      "predicted_class": "airplane",
+      "target_class": "airplane",
+      "target_logit_margin": 3.6029882431030273
+    },
+    "ablations": [
+      {
+        "layer": "conv1",
+        "channel": 2,
+        "selection": "highest mean post-ReLU activation",
+        "mean_activation": 1.5959498882293701,
+        "modified": {
+          "logits": [
+            -0.6933885812759399,
+            -0.8102465867996216,
+            2.134488105773926
+          ],
+          "probabilities": [
+            0.053193677216768265,
+            0.04732702299952507,
+            0.899479329586029
+          ],
+          "predicted_class": "airplane",
+          "target_class": "airplane",
+          "target_logit_margin": 2.827876567840576
+        },
+        "target_margin_change": -0.7751116752624512
+      },
+      {
+        "layer": "conv2",
+        "channel": 8,
+        "selection": "highest mean post-ReLU activation",
+        "mean_activation": 3.6802642345428467,
+        "modified": {
+          "logits": [
+            -0.5940508246421814,
+            -0.7363715171813965,
+            2.0555942058563232
+          ],
+          "probabilities": [
+            0.06243615970015526,
+            0.054153576493263245,
+            0.8834102749824524
+          ],
+          "predicted_class": "airplane",
+          "target_class": "airplane",
+          "target_logit_margin": 2.6496450901031494
+        },
+        "target_margin_change": -0.9533431529998779
+      }
+    ],
+    "occlusion": {
+      "type": "controlled_occlusion",
+      "rectangle_xywh": [
+        12,
+        12,
+        4,
+        4
+      ],
+      "replacement_rgb": [
+        128,
+        128,
+        128
+      ],
+      "affected_pixels": 16,
+      "modified": {
+        "logits": [
+          -0.7955825328826904,
+          -1.031609296798706,
+          2.6863327026367188
+        ],
+        "probabilities": [
+          0.029144568368792534,
+          0.02301720157265663,
+          0.9478381872177124
+        ],
+        "predicted_class": "airplane",
+        "target_class": "airplane",
+        "target_logit_margin": 3.481915235519409
+      }
+    },
+    "background_swaps": [
+      {
+        "background": "green",
+        "rgb": [
+          70,
+          170,
+          90
+        ],
+        "logits": [
+          -1.0566743612289429,
+          -1.6378037929534912,
+          3.064563512802124
+        ],
+        "probabilities": [
+          0.015824098140001297,
+          0.008849884383380413,
+          0.9753259420394897
+        ],
+        "predicted_class": "airplane",
+        "target_class": "airplane",
+        "target_logit_margin": 4.121237754821777
+      },
+      {
+        "background": "blue",
+        "rgb": [
+          65,
+          120,
+          210
+        ],
+        "logits": [
+          -0.5795739889144897,
+          -1.1645017862319946,
+          2.8337159156799316
+        ],
+        "probabilities": [
+          0.031326234340667725,
+          0.01745329238474369,
+          0.9512205123901367
+        ],
+        "predicted_class": "airplane",
+        "target_class": "airplane",
+        "target_logit_margin": 3.413290023803711
+      },
+      {
+        "background": "yellow",
+        "rgb": [
+          230,
+          195,
+          55
+        ],
+        "logits": [
+          -0.8436269164085388,
+          -1.1084398031234741,
+          2.7593612670898438
+        ],
+        "probabilities": [
+          0.02599082887172699,
+          0.019944049417972565,
+          0.9540651440620422
+        ],
+        "predicted_class": "airplane",
+        "target_class": "airplane",
+        "target_logit_margin": 3.6029882431030273
+      },
+      {
+        "background": "gray",
+        "rgb": [
+          128,
+          128,
+          128
+        ],
+        "logits": [
+          -0.8792591094970703,
+          -1.3934454917907715,
+          2.918705701828003
+        ],
+        "probabilities": [
+          0.021641137078404427,
+          0.012941121123731136,
+          0.9654176831245422
+        ],
+        "predicted_class": "airplane",
+        "target_class": "airplane",
+        "target_logit_margin": 3.7979648113250732
+      }
+    ],
+    "raw_arrays": "example-balanced-airplane.npz",
+    "checks": {
+      "repeat_inference_exact": true,
+      "reset_exact": true,
+      "ablation_injection_exact": true,
+      "saliency_finite_nonzero": true
+    }
+  },
+  {
+    "model": "shortcut",
+    "checkpoint_sha256": "e236dc80ac0b0be184705a4030211c619fc8b61f9f1de8078d3b582441e36289",
+    "sample_id": "cat:28291",
+    "selection": "first manifest test drawing per class; illustrative, not curated",
+    "background": "green",
+    "baseline": {
+      "logits": [
+        2.515606641769409,
+        -1.312361717224121,
+        -2.1061995029449463
+      ],
+      "probabilities": [
+        0.9693785309791565,
+        0.021087635308504105,
+        0.009533853270113468
+      ],
+      "predicted_class": "cat",
+      "target_class": "cat",
+      "target_logit_margin": 3.8279683589935303
+    },
+    "ablations": [
+      {
+        "layer": "conv1",
+        "channel": 2,
+        "selection": "highest mean post-ReLU activation",
+        "mean_activation": 1.2721076011657715,
+        "modified": {
+          "logits": [
+            0.4638773798942566,
+            0.23567458987236023,
+            -0.6551850438117981
+          ],
+          "probabilities": [
+            0.47113174200057983,
+            0.3750033378601074,
+            0.15386496484279633
+          ],
+          "predicted_class": "cat",
+          "target_class": "cat",
+          "target_logit_margin": 0.22820279002189636
+        },
+        "target_margin_change": -3.599765568971634
+      },
+      {
+        "layer": "conv2",
+        "channel": 13,
+        "selection": "highest mean post-ReLU activation",
+        "mean_activation": 2.748530387878418,
+        "modified": {
+          "logits": [
+            2.0387942790985107,
+            -0.06181981414556503,
+            -1.9908186197280884
+          ],
+          "probabilities": [
+            0.8770679831504822,
+            0.10733667761087418,
+            0.015595328994095325
+          ],
+          "predicted_class": "cat",
+          "target_class": "cat",
+          "target_logit_margin": 2.100614070892334
+        },
+        "target_margin_change": -1.7273542881011963
+      }
+    ],
+    "occlusion": {
+      "type": "controlled_occlusion",
+      "rectangle_xywh": [
+        12,
+        12,
+        4,
+        4
+      ],
+      "replacement_rgb": [
+        128,
+        128,
+        128
+      ],
+      "affected_pixels": 16,
+      "modified": {
+        "logits": [
+          2.4414830207824707,
+          -0.9584803581237793,
+          -2.3436405658721924
+        ],
+        "probabilities": [
+          0.9599437713623047,
+          0.032037634402513504,
+          0.0080184955149889
+        ],
+        "predicted_class": "cat",
+        "target_class": "cat",
+        "target_logit_margin": 3.39996337890625
+      }
+    },
+    "background_swaps": [
+      {
+        "background": "green",
+        "rgb": [
+          70,
+          170,
+          90
+        ],
+        "logits": [
+          2.515606641769409,
+          -1.312361717224121,
+          -2.1061995029449463
+        ],
+        "probabilities": [
+          0.9693785309791565,
+          0.021087635308504105,
+          0.009533853270113468
+        ],
+        "predicted_class": "cat",
+        "target_class": "cat",
+        "target_logit_margin": 3.8279683589935303
+      },
+      {
+        "background": "blue",
+        "rgb": [
+          65,
+          120,
+          210
+        ],
+        "logits": [
+          -0.2320600301027298,
+          1.7635029554367065,
+          -1.5774883031845093
+        ],
+        "probabilities": [
+          0.11605274677276611,
+          0.8537238836288452,
+          0.030223403126001358
+        ],
+        "predicted_class": "fish",
+        "target_class": "cat",
+        "target_logit_margin": -1.99556303024292
+      },
+      {
+        "background": "yellow",
+        "rgb": [
+          230,
+          195,
+          55
+        ],
+        "logits": [
+          -1.2340532541275024,
+          -2.046306610107422,
+          -0.186793714761734
+        ],
+        "probabilities": [
+          0.23290002346038818,
+          0.10337425768375397,
+          0.6637256741523743
+        ],
+        "predicted_class": "airplane",
+        "target_class": "cat",
+        "target_logit_margin": -1.0472595691680908
+      },
+      {
+        "background": "gray",
+        "rgb": [
+          128,
+          128,
+          128
+        ],
+        "logits": [
+          1.9574216604232788,
+          -1.8000701665878296,
+          -1.6140501499176025
+        ],
+        "probabilities": [
+          0.9510615468025208,
+          0.022199882194399834,
+          0.026738569140434265
+        ],
+        "predicted_class": "cat",
+        "target_class": "cat",
+        "target_logit_margin": 3.571471691131592
+      }
+    ],
+    "raw_arrays": "example-shortcut-cat.npz",
+    "checks": {
+      "repeat_inference_exact": true,
+      "reset_exact": true,
+      "ablation_injection_exact": true,
+      "saliency_finite_nonzero": true
+    }
+  },
+  {
+    "model": "shortcut",
+    "checkpoint_sha256": "e236dc80ac0b0be184705a4030211c619fc8b61f9f1de8078d3b582441e36289",
+    "sample_id": "fish:95563",
+    "selection": "first manifest test drawing per class; illustrative, not curated",
+    "background": "blue",
+    "baseline": {
+      "logits": [
+        -2.359238386154175,
+        3.2043468952178955,
+        -0.9372850060462952
+      ],
+      "probabilities": [
+        0.0037607946433126926,
+        0.9806499481201172,
+        0.015589279122650623
+      ],
+      "predicted_class": "fish",
+      "target_class": "fish",
+      "target_logit_margin": 4.141632080078125
+    },
+    "ablations": [
+      {
+        "layer": "conv1",
+        "channel": 2,
+        "selection": "highest mean post-ReLU activation",
+        "mean_activation": 1.3399497270584106,
+        "modified": {
+          "logits": [
+            -4.00482702255249,
+            4.6312947273254395,
+            0.4450107514858246
+          ],
+          "probabilities": [
+            0.00017488448065705597,
+            0.9848527312278748,
+            0.014972393400967121
+          ],
+          "predicted_class": "fish",
+          "target_class": "fish",
+          "target_logit_margin": 4.186284065246582
+        },
+        "target_margin_change": 0.04465198516845703
+      },
+      {
+        "layer": "conv2",
+        "channel": 13,
+        "selection": "highest mean post-ReLU activation",
+        "mean_activation": 2.9397988319396973,
+        "modified": {
+          "logits": [
+            -2.426347017288208,
+            4.438049793243408,
+            -0.91644686460495
+          ],
+          "probabilities": [
+            0.0010383196640759706,
+            0.9942619800567627,
+            0.00469972612336278
+          ],
+          "predicted_class": "fish",
+          "target_class": "fish",
+          "target_logit_margin": 5.354496479034424
+        },
+        "target_margin_change": 1.2128643989562988
+      }
+    ],
+    "occlusion": {
+      "type": "controlled_occlusion",
+      "rectangle_xywh": [
+        12,
+        12,
+        4,
+        4
+      ],
+      "replacement_rgb": [
+        128,
+        128,
+        128
+      ],
+      "affected_pixels": 16,
+      "modified": {
+        "logits": [
+          -2.316797971725464,
+          3.721269130706787,
+          -1.3307961225509644
+        ],
+        "probabilities": [
+          0.0023653937969356775,
+          0.9912942051887512,
+          0.006340425927191973
+        ],
+        "predicted_class": "fish",
+        "target_class": "fish",
+        "target_logit_margin": 5.052065372467041
+      }
+    },
+    "background_swaps": [
+      {
+        "background": "green",
+        "rgb": [
+          70,
+          170,
+          90
+        ],
+        "logits": [
+          0.9687482118606567,
+          -0.11536385864019394,
+          -1.8970242738723755
+        ],
+        "probabilities": [
+          0.7167733907699585,
+          0.2424141764640808,
+          0.040812451392412186
+        ],
+        "predicted_class": "cat",
+        "target_class": "fish",
+        "target_logit_margin": -1.0841120481491089
+      },
+      {
+        "background": "blue",
+        "rgb": [
+          65,
+          120,
+          210
+        ],
+        "logits": [
+          -2.359238386154175,
+          3.2043468952178955,
+          -0.9372850060462952
+        ],
+        "probabilities": [
+          0.0037607946433126926,
+          0.9806499481201172,
+          0.015589279122650623
+        ],
+        "predicted_class": "fish",
+        "target_class": "fish",
+        "target_logit_margin": 4.141632080078125
+      },
+      {
+        "background": "yellow",
+        "rgb": [
+          230,
+          195,
+          55
+        ],
+        "logits": [
+          -2.483488082885742,
+          -1.1797221899032593,
+          -0.1003517284989357
+        ],
+        "probabilities": [
+          0.06442475318908691,
+          0.23728540539741516,
+          0.6982898116111755
+        ],
+        "predicted_class": "airplane",
+        "target_class": "fish",
+        "target_logit_margin": -1.0793704986572266
+      },
+      {
+        "background": "gray",
+        "rgb": [
+          128,
+          128,
+          128
+        ],
+        "logits": [
+          0.4260443449020386,
+          -0.8050200939178467,
+          -1.2627549171447754
+        ],
+        "probabilities": [
+          0.6771751642227173,
+          0.1977226883172989,
+          0.1251021772623062
+        ],
+        "predicted_class": "cat",
+        "target_class": "fish",
+        "target_logit_margin": -1.2310644388198853
+      }
+    ],
+    "raw_arrays": "example-shortcut-fish.npz",
+    "checks": {
+      "repeat_inference_exact": true,
+      "reset_exact": true,
+      "ablation_injection_exact": true,
+      "saliency_finite_nonzero": true
+    }
+  },
+  {
+    "model": "shortcut",
+    "checkpoint_sha256": "e236dc80ac0b0be184705a4030211c619fc8b61f9f1de8078d3b582441e36289",
+    "sample_id": "airplane:136522",
+    "selection": "first manifest test drawing per class; illustrative, not curated",
+    "background": "yellow",
+    "baseline": {
+      "logits": [
+        -3.9629290103912354,
+        -3.0515553951263428,
+        2.1211299896240234
+      ],
+      "probabilities": [
+        0.0022609378211200237,
+        0.005624616984277964,
+        0.9921144247055054
+      ],
+      "predicted_class": "airplane",
+      "target_class": "airplane",
+      "target_logit_margin": 5.172685623168945
+    },
+    "ablations": [
+      {
+        "layer": "conv1",
+        "channel": 2,
+        "selection": "highest mean post-ReLU activation",
+        "mean_activation": 1.454446792602539,
+        "modified": {
+          "logits": [
+            -2.6075141429901123,
+            -1.5595096349716187,
+            1.2782909870147705
+          ],
+          "probabilities": [
+            0.019026566296815872,
+            0.05426289886236191,
+            0.9267105460166931
+          ],
+          "predicted_class": "airplane",
+          "target_class": "airplane",
+          "target_logit_margin": 2.8378005027770996
+        },
+        "target_margin_change": -2.3348851203918457
+      },
+      {
+        "layer": "conv2",
+        "channel": 13,
+        "selection": "highest mean post-ReLU activation",
+        "mean_activation": 2.9780280590057373,
+        "modified": {
+          "logits": [
+            -2.953758716583252,
+            -2.0093443393707275,
+            1.4024142026901245
+          ],
+          "probabilities": [
+            0.012265494093298912,
+            0.03153835982084274,
+            0.956196129322052
+          ],
+          "predicted_class": "airplane",
+          "target_class": "airplane",
+          "target_logit_margin": 3.4117584228515625
+        },
+        "target_margin_change": -1.7609272003173828
+      }
+    ],
+    "occlusion": {
+      "type": "controlled_occlusion",
+      "rectangle_xywh": [
+        12,
+        12,
+        4,
+        4
+      ],
+      "replacement_rgb": [
+        128,
+        128,
+        128
+      ],
+      "affected_pixels": 16,
+      "modified": {
+        "logits": [
+          -3.8929102420806885,
+          -3.0825862884521484,
+          2.135388135910034
+        ],
+        "probabilities": [
+          0.0023908752482384443,
+          0.005376207642257214,
+          0.9922329187393188
+        ],
+        "predicted_class": "airplane",
+        "target_class": "airplane",
+        "target_logit_margin": 5.217974662780762
+      }
+    },
+    "background_swaps": [
+      {
+        "background": "green",
+        "rgb": [
+          70,
+          170,
+          90
+        ],
+        "logits": [
+          -0.7063935995101929,
+          -2.518080234527588,
+          1.0940576791763306
+        ],
+        "probabilities": [
+          0.13858561217784882,
+          0.02264188975095749,
+          0.8387724757194519
+        ],
+        "predicted_class": "airplane",
+        "target_class": "airplane",
+        "target_logit_margin": 1.8004512786865234
+      },
+      {
+        "background": "blue",
+        "rgb": [
+          65,
+          120,
+          210
+        ],
+        "logits": [
+          -3.433542013168335,
+          1.2655659914016724,
+          1.354793906211853
+        ],
+        "probabilities": [
+          0.004329932387918234,
+          0.47563934326171875,
+          0.520030677318573
+        ],
+        "predicted_class": "airplane",
+        "target_class": "airplane",
+        "target_logit_margin": 0.08922791481018066
+      },
+      {
+        "background": "yellow",
+        "rgb": [
+          230,
+          195,
+          55
+        ],
+        "logits": [
+          -3.9629290103912354,
+          -3.0515553951263428,
+          2.1211299896240234
+        ],
+        "probabilities": [
+          0.0022609378211200237,
+          0.005624616984277964,
+          0.9921144247055054
+        ],
+        "predicted_class": "airplane",
+        "target_class": "airplane",
+        "target_logit_margin": 5.172685623168945
+      },
+      {
+        "background": "gray",
+        "rgb": [
+          128,
+          128,
+          128
+        ],
+        "logits": [
+          -0.9700285196304321,
+          -2.953917980194092,
+          1.2362666130065918
+        ],
+        "probabilities": [
+          0.09785177558660507,
+          0.013457872904837132,
+          0.8886903524398804
+        ],
+        "predicted_class": "airplane",
+        "target_class": "airplane",
+        "target_logit_margin": 2.2062950134277344
+      }
+    ],
+    "raw_arrays": "example-shortcut-airplane.npz",
+    "checks": {
+      "repeat_inference_exact": true,
+      "reset_exact": true,
+      "ablation_injection_exact": true,
+      "saliency_finite_nonzero": true
+    }
+  }
+]

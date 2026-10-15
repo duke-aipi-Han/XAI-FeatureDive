@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "regime": "shortcut",
+  "config": {
+    "schema_version": 1,
+    "split_seed": 590,
+    "training_seed": 590,
+    "background_seed": 591,
+    "train_per_class": 2000,
+    "validation_per_class": 300,
+    "test_per_class": 300,
+    "epochs": 12,
+    "batch_size": 128,
+    "learning_rate": 0.001,
+    "threads": 4,
+    "bootstrap_replicates": 1000
+  },
+  "class_order": [
+    "cat",
+    "fish",
+    "airplane"
+  ],
+  "background_names": [
+    "green",
+    "blue",
+    "yellow",
+    "gray"
+  ],
+  "background_rgb": [
+    [
+      70,
+      170,
+      90
+    ],
+    [
+      65,
+      120,
+      210
+    ],
+    [
+      230,
+      195,
+      55
+    ],
+    [
+      128,
+      128,
+      128
+    ]
+  ],
+  "input_normalization": "uint8/255 alpha; white strokes; RGB in [0,1]",
+  "optimizer": "Adam (PyTorch default betas, eps, weight_decay=0)",
+  "parameter_count": 26611,
+  "manifest_sha256": "28ee7fea8434de116c4dd4820ad2ae55ee7a98f5935f5ce777c4f809aeba735c",
+  "training_background_counts_by_class": [
+    [
+      1794,
+      108,
+      98
+    ],
+    [
+      102,
+      1794,
+      104
+    ],
+    [
+      111,
+      104,
+      1785
+    ]
+  ],
+  "epoch_selection": "maximum validation accuracy averaged over all three training colors; first best epoch",
+  "environment": {
+    "python": "3.11.15",
+    "torch": "2.14.1",
+    "numpy": "2.4.6",
+    "platform": "macOS-26.6.2-arm64-arm-64bit",
+    "device": "cpu"
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.6941543833414714,
+      "train_accuracy": 0.7858333333333334,
+      "balanced_validation_accuracy": 0.3348148148148148
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.4091547163327535,
+      "train_accuracy": 0.8963333333333333,
+      "balanced_validation_accuracy": 0.3488888888888889
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.31512973805268607,
+      "train_accuracy": 0.9008333333333334,
+      "balanced_validation_accuracy": 0.4337037037037037
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.26653234446048735,
+      "train_accuracy": 0.909,
+      "balanced_validation_accuracy": 0.5140740740740741
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.2326975136200587,
+      "train_accuracy": 0.9145,
+      "balanced_validation_accuracy": 0.5537037037037037
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.22812377619743346,
+      "train_accuracy": 0.9175,
+      "balanced_validation_accuracy": 0.5774074074074074
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.23388827057679495,
+      "train_accuracy": 0.9181666666666667,
+      "balanced_validation_accuracy": 0.5955555555555555
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.2415955778360367,
+      "train_accuracy": 0.916,
+      "balanced_validation_accuracy": 0.5588888888888889
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.22387966803709666,
+      "train_accuracy": 0.9181666666666667,
+      "balanced_validation_accuracy": 0.64
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.198153382062912,
+      "train_accuracy": 0.9286666666666666,
+      "balanced_validation_accuracy": 0.6348148148148148
+    },
+    {
+      "epoch": 11,
+      "train_loss": 0.19644996746381124,
+      "train_accuracy": 0.9311666666666667,
+      "balanced_validation_accuracy": 0.6537037037037037
+    },
+    {
+      "epoch": 12,
+      "train_loss": 0.19390716608365377,
+      "train_accuracy": 0.9326666666666666,
+      "balanced_validation_accuracy": 0.6533333333333333
+    }
+  ],
+  "elapsed_seconds": 5.9658365420182236,
+  "checkpoint": "checkpoints/pilot-shortcut.pt",
+  "checkpoint_sha256": "e236dc80ac0b0be184705a4030211c619fc8b61f9f1de8078d3b582441e36289"
+}

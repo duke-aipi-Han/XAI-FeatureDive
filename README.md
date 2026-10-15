@@ -4,83 +4,108 @@
 
 A Responsible AI educational project for exploring a small CNN through
 activation inspection, gradient attribution, and controlled interventions.
-The planned dataset is Google Quick, Draw! with the fixed class order
-`cat = 0`, `fish = 1`, `airplane = 2`.
-
-The source of truth is
-[the implementation plan](FeatureDive-Codex-Implementation-Plan.md).
+The source of truth is [the implementation plan](FeatureDive-Codex-Implementation-Plan.md).
 
 ## Current status
 
-This repository contains the minimum Python skeleton for Phase 0. Data loading,
-the CNN, training, and evaluations are not implemented yet. There are no trained
-checkpoints or measured results. Frontend, API, and deployment work are deferred.
+**Phase 0 is implemented and measured.** Two real CPU-trained pilot checkpoints
+use Google Quick, Draw! bitmaps with `cat = 0`, `fish = 1`, `airplane = 2`.
+No frontend, API, or deployment has been started. Phase 1 awaits review.
 
-## Local setup
+On 900 held-out source drawings:
 
-Use Python 3.11 or newer. The `.python-version` file selects Python 3.11 for
-tools that support it.
+| Pilot measurement | Balanced model | Shortcut model |
+| --- | ---: | ---: |
+| Accuracy across three equally weighted backgrounds | 84.56% | 65.56% |
+| Accuracy under each model's training-like color distribution | 84.56% | 93.42% |
+| Sources with any label flip across three backgrounds | 2.22% | 65.33% |
 
-With `uv`:
+These are single-seed pilot results. Read the
+[feasibility report](docs/phase0-feasibility.md) for confidence intervals,
+confusion matrices, real intervention examples, provenance, and limitations.
+
+![Phase 0 measured results](results/phase0/overview.png)
+
+## Reproduce Phase 0
+
+Python 3.11 is recorded in `.python-version`. Dependencies are locked in `uv.lock`.
+Run from the repository root:
 
 ```sh
-uv sync --extra dev
+uv sync --locked --extra dev
+uv run --locked python -m ml.data_loader
+uv run --locked python -m ml.train
+uv run --locked python -m ml.evaluate
+uv run --locked pytest -q
 ```
 
-Alternatively, with Python's built-in environment tooling:
+The download command fetches three public `.npy` files (about 337 MiB total).
+It verifies existing arrays and reuses the frozen manifest, rejecting source
+checksum or split-setting mismatches. After download and setup, training and
+evaluation run offline on CPU. Evaluation loads the saved checkpoints; it does
+not train. Rerunning training overwrites the two local pilot checkpoints.
+
+The pilot uses 2,000 train / 300 validation / 300 test sources per class,
+selected from full-category files using seed 590 before color assignment.
+[configs/phase0.json](configs/phase0.json) records hyperparameters. Both models
+use the specified 26,611-parameter CNN and the same initialization and training
+budget. Training colors are fixed per source, with recorded counts. Neutral gray
+is reserved for evaluation.
+
+If using pip instead of uv:
 
 ```sh
 python3.11 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e '.[dev]'
+python -m ml.data_loader
+python -m ml.train
+python -m ml.evaluate
+python -m pytest -q
 ```
 
-Core dependencies are PyTorch, NumPy, and Pillow; the `dev` extra adds pytest.
-Dependencies have not been installed or locked as part of this scaffold.
-When first resolving dependencies with `uv`, commit the generated `uv.lock`
-and use `uv sync --locked --extra dev` for subsequent reproducible setup.
+The pip alternative resolves version ranges; use the locked uv workflow to
+reproduce the recorded dependency versions.
 
 ## Layout
 
 ```text
-ml/                  Python package for the Phase 0 data/model code
-tests/               Future pytest tests
-data/raw/            Downloaded source data (ignored by Git)
-data/processed/      Generated splits and processed data (ignored by Git)
-checkpoints/         Trained model artifacts (ignored by Git)
-results/metrics/     Generated measurements (ignored by Git)
-results/figures/     Generated visualizations (ignored by Git)
+configs/phase0.json          Recorded pilot configuration
+ml/data_loader.py           Downloads, checksums, source manifest, split loading
+ml/backgrounds.py           Alpha compositing and training color assignments
+ml/model.py                 CNN with explicit post-ReLU activation/ablation taps
+ml/train.py                 CPU pilots and validation-selected checkpoints
+ml/interpretability.py      Class-logit gradient saliency and target margins
+ml/evaluate.py              Paired color evaluation and real intervention examples
+ml/figures.py               Figures and report generated from measured outputs
+tests/                      Scientific invariants and evaluation checks
+data/manifests/             Versioned source indices, hashes and provenance
+data/raw/                   Downloaded bitmaps (ignored by Git)
+data/processed/             Reserved for derived datasets (ignored by Git)
+checkpoints/                Two compact, versioned pilot checkpoints
+results/phase0/              Versioned pilot JSON, CSV, raw arrays, and PNGs
+docs/phase0-feasibility.md   Measured report and Phase 0 review checkpoint
 ```
 
-Keep source code, experiment configurations, provenance documentation, and
-versioned split manifests in Git. Bulk data and generated artifacts are ignored
-by default; add publication artifacts deliberately when they are ready.
+Bulk source arrays and future generated checkpoints are excluded from Git. The
+two compact pilot checkpoints are explicitly included so the measured examples
+can be replayed without retraining. Their SHA-256 values and metadata are recorded
+in the report and results. Source manifests and measured pilot outputs are also
+included for review.
 
-## Testing
+## Interpretation and data attribution
 
-Once implementation tests exist, run:
+Activation is an observation. Gradient saliency measures local sensitivity.
+Input occlusion and post-ReLU channel zeroing are interventions with measured
+model effects. None establishes a uniquely meaningful semantic feature or
+real-world causal mechanism. Softmax outputs are uncalibrated probabilities.
 
-```sh
-uv run pytest
-# Or, inside the activated virtual environment:
-python -m pytest
-```
+The Quick, Draw! Dataset is made available by Google, Inc. under
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), as recorded in the
+[canonical dataset documentation](https://github.com/googlecreativelab/quickdraw-dataset).
+This project samples bitmap rows, composites white strokes over colored
+backgrounds, and generates intervention variants. See [data/README.md](data/README.md)
+for provenance and source-format limitations.
 
-No tests exist yet; pytest will currently report no tests collected (exit code 5).
-
-## Initialize Git
-
-From this folder:
-
-```sh
-git init -b main
-git add .
-git commit -m "Initialize FeatureDive Python skeleton"
-```
-
-## Next checkpoint
-
-Implement Phase 0 only: deterministic source splits, RGB background compositing,
-the specified 26,611-parameter CNN, balanced and shortcut pilot training, and
-measured intervention checks. Record real feasibility results and stop for review
-before Phase 1 or frontend implementation, as required by the plan.
+**Stop after Phase 0:** review the feasibility report before authorizing Phase 1
+or frontend development, as required by the implementation plan.

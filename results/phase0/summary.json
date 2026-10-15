@@ -1,0 +1,414 @@
+{
+  "schema_version": 1,
+  "config": {
+    "schema_version": 1,
+    "split_seed": 590,
+    "training_seed": 590,
+    "background_seed": 591,
+    "train_per_class": 2000,
+    "validation_per_class": 300,
+    "test_per_class": 300,
+    "epochs": 12,
+    "batch_size": 128,
+    "learning_rate": 0.001,
+    "threads": 4,
+    "bootstrap_replicates": 1000
+  },
+  "manifest_sha256": "28ee7fea8434de116c4dd4820ad2ae55ee7a98f5935f5ce777c4f809aeba735c",
+  "class_order": [
+    "cat",
+    "fish",
+    "airplane"
+  ],
+  "background_names": [
+    "green",
+    "blue",
+    "yellow",
+    "gray"
+  ],
+  "background_rgb": [
+    [
+      70,
+      170,
+      90
+    ],
+    [
+      65,
+      120,
+      210
+    ],
+    [
+      230,
+      195,
+      55
+    ],
+    [
+      128,
+      128,
+      128
+    ]
+  ],
+  "foreground_checks": {
+    "drawings_checked": 900,
+    "unchanged_alpha": true,
+    "max_counterfactual_formula_error": 1.1920928955078125e-07
+  },
+  "ci_method": "1000 percentile bootstrap replicates resampling source drawings; all matched colors and both models stay paired",
+  "color_comparison_scope": "three training colors; neutral gray reported separately",
+  "models": [
+    {
+      "regime": "balanced",
+      "checkpoint_sha256": "2d24a0a2df98bdfbe93c0ee106b0c856d842c9f5c0046fd7d3c2df51bd58e972",
+      "checkpoint": "checkpoints/pilot-balanced.pt",
+      "best_epoch": 12,
+      "validation_accuracy": 0.8770370370370371,
+      "source_drawings": 900,
+      "accuracy": {
+        "balanced_colors": {
+          "mean": 0.8455555555555555,
+          "ci95": [
+            0.8225925925925925,
+            0.8662962962962963
+          ]
+        },
+        "training_like_expected": {
+          "mean": 0.8455555555555555,
+          "ci95": [
+            0.8225925925925925,
+            0.8662962962962963
+          ]
+        },
+        "preferred_mapping": {
+          "mean": 0.8444444444444444,
+          "ci95": [
+            0.8222222222222222,
+            0.8655555555555555
+          ]
+        },
+        "swapped_mapping_1": {
+          "mean": 0.8477777777777777,
+          "ci95": [
+            0.8244444444444444,
+            0.87
+          ]
+        },
+        "swapped_mapping_2": {
+          "mean": 0.8444444444444444,
+          "ci95": [
+            0.82,
+            0.8644444444444445
+          ]
+        },
+        "green": {
+          "mean": 0.8433333333333334,
+          "ci95": [
+            0.8199722222222222,
+            0.8644722222222222
+          ]
+        },
+        "blue": {
+          "mean": 0.8466666666666667,
+          "ci95": [
+            0.8222222222222222,
+            0.8678055555555555
+          ]
+        },
+        "yellow": {
+          "mean": 0.8466666666666667,
+          "ci95": [
+            0.8233333333333334,
+            0.8677777777777778
+          ]
+        },
+        "gray": {
+          "mean": 0.8477777777777777,
+          "ci95": [
+            0.8244444444444444,
+            0.8688888888888889
+          ]
+        }
+      },
+      "any_color_flip_rate": {
+        "mean": 0.022222222222222223,
+        "ci95": [
+          0.013333333333333334,
+          0.03333333333333333
+        ]
+      },
+      "pairwise_color_flip_rate": {
+        "mean": 0.014814814814814814,
+        "ci95": [
+          0.008888888888888887,
+          0.022222222222222223
+        ]
+      },
+      "target_margin_range": {
+        "mean": 0.6963868469993273,
+        "ci95": [
+          0.6734960603093108,
+          0.7197992605020603
+        ]
+      },
+      "target_probability_range": {
+        "mean": 0.04268308704563727,
+        "ci95": [
+          0.040610633227353296,
+          0.044675971130827545
+        ]
+      },
+      "confusion_matrices": {
+        "green": [
+          [
+            255,
+            10,
+            35
+          ],
+          [
+            20,
+            273,
+            7
+          ],
+          [
+            54,
+            15,
+            231
+          ]
+        ],
+        "blue": [
+          [
+            257,
+            10,
+            33
+          ],
+          [
+            20,
+            272,
+            8
+          ],
+          [
+            55,
+            12,
+            233
+          ]
+        ],
+        "yellow": [
+          [
+            254,
+            9,
+            37
+          ],
+          [
+            20,
+            275,
+            5
+          ],
+          [
+            52,
+            15,
+            233
+          ]
+        ],
+        "gray": [
+          [
+            257,
+            9,
+            34
+          ],
+          [
+            20,
+            273,
+            7
+          ],
+          [
+            54,
+            13,
+            233
+          ]
+        ]
+      }
+    },
+    {
+      "regime": "shortcut",
+      "checkpoint_sha256": "e236dc80ac0b0be184705a4030211c619fc8b61f9f1de8078d3b582441e36289",
+      "checkpoint": "checkpoints/pilot-shortcut.pt",
+      "best_epoch": 11,
+      "validation_accuracy": 0.6537037037037037,
+      "source_drawings": 900,
+      "accuracy": {
+        "balanced_colors": {
+          "mean": 0.6555555555555556,
+          "ci95": [
+            0.6377685185185186,
+            0.674074074074074
+          ]
+        },
+        "training_like_expected": {
+          "mean": 0.9341666666666667,
+          "ci95": [
+            0.9258319444444444,
+            0.9424444444444445
+          ]
+        },
+        "preferred_mapping": {
+          "mean": 0.9833333333333333,
+          "ci95": [
+            0.9744444444444444,
+            0.9911111111111112
+          ]
+        },
+        "swapped_mapping_1": {
+          "mean": 0.4533333333333333,
+          "ci95": [
+            0.4211111111111111,
+            0.4866666666666667
+          ]
+        },
+        "swapped_mapping_2": {
+          "mean": 0.53,
+          "ci95": [
+            0.49777777777777776,
+            0.5611111111111111
+          ]
+        },
+        "green": {
+          "mean": 0.7522222222222222,
+          "ci95": [
+            0.7233333333333334,
+            0.78
+          ]
+        },
+        "blue": {
+          "mean": 0.5911111111111111,
+          "ci95": [
+            0.5577777777777778,
+            0.6211388888888888
+          ]
+        },
+        "yellow": {
+          "mean": 0.6233333333333333,
+          "ci95": [
+            0.5922222222222222,
+            0.6544722222222222
+          ]
+        },
+        "gray": {
+          "mean": 0.7511111111111111,
+          "ci95": [
+            0.7244166666666667,
+            0.7766666666666666
+          ]
+        }
+      },
+      "any_color_flip_rate": {
+        "mean": 0.6533333333333333,
+        "ci95": [
+          0.6222222222222222,
+          0.6833333333333333
+        ]
+      },
+      "pairwise_color_flip_rate": {
+        "mean": 0.537037037037037,
+        "ci95": [
+          0.5103611111111112,
+          0.5633425925925926
+        ]
+      },
+      "target_margin_range": {
+        "mean": 5.664278625912137,
+        "ci95": [
+          5.619267148388756,
+          5.7066870996952055
+        ]
+      },
+      "target_probability_range": {
+        "mean": 0.5923309394882785,
+        "ci95": [
+          0.5770909768214656,
+          0.6076230445930527
+        ]
+      },
+      "confusion_matrices": {
+        "green": [
+          [
+            293,
+            3,
+            4
+          ],
+          [
+            44,
+            254,
+            2
+          ],
+          [
+            165,
+            5,
+            130
+          ]
+        ],
+        "blue": [
+          [
+            130,
+            162,
+            8
+          ],
+          [
+            0,
+            299,
+            1
+          ],
+          [
+            13,
+            184,
+            103
+          ]
+        ],
+        "yellow": [
+          [
+            120,
+            6,
+            174
+          ],
+          [
+            4,
+            148,
+            148
+          ],
+          [
+            4,
+            3,
+            293
+          ]
+        ],
+        "gray": [
+          [
+            281,
+            2,
+            17
+          ],
+          [
+            71,
+            214,
+            15
+          ],
+          [
+            119,
+            0,
+            181
+          ]
+        ]
+      }
+    }
+  ],
+  "shortcut_minus_balanced_any_color_flip_rate": {
+    "mean": 0.6311111111111111,
+    "ci95": [
+      0.5977777777777777,
+      0.6611388888888888
+    ]
+  },
+  "environment": {
+    "python": "3.11.15",
+    "torch": "2.14.1",
+    "numpy": "2.4.6"
+  }
+}
