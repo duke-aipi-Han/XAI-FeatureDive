@@ -1,0 +1,35 @@
+# Python and local environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Local settings and credentials
+.DS_Store
+.idea/
+.vscode/
+.env
+.env.*
+!.env.example
+.aws/
+
+# Generated research artifacts; keep directory placeholders
+/data/raw/*
+!/data/raw/.gitkeep
+/data/processed/*
+!/data/processed/.gitkeep
+/checkpoints/*
+!/checkpoints/.gitkeep
+/results/metrics/*
+!/results/metrics/.gitkeep
+/results/figures/*
+!/results/figures/.gitkeep
