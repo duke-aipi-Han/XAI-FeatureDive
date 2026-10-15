@@ -1,7 +1,7 @@
 # FeatureDive frontend
 
 Local React + TypeScript / Vite interface for the real CPU inference API.
-See [Phase 3 documentation](../docs/phase3-interface.md) for interaction details
+See the [Phase 4 challenge guide](../docs/phase4-challenges.md) and [Phase 3 documentation](../docs/phase3-interface.md) for interaction details
 and browser acceptance evidence.
 
 From the repository root, run the API in one terminal:
@@ -37,7 +37,13 @@ contract; `state.ts` handles immutable request/history transformations.
 handles crisp rendering and source-coordinate selection, and `Results.tsx`
 shows measured comparisons, history, and export. CSS controls 2.5D presentation,
 responsive layout, focus styles, and reduced-motion behavior.
+`src/challenges/` provides three guided investigations, separate recorded
+hypotheses and measurements, dynamic feedback, completion tracking, and local
+JSON export. A/B assignments in the Shortcut Trap are randomized and revealed
+only after the visitor records an identification and evidence. Session progress
+is kept in browser memory and clears on reload. Hypotheses/reflections are never
+sent to the API. Browser acceptance artifacts are written to `results/phase4/`.
 
 The frontend never trains or performs model inference locally in JavaScript.
-All scientific values are returned by the registered PyTorch API. Phase 4
-challenge flows and Phase 6 hosting are outside this implementation.
+All scientific values are returned by the registered PyTorch API. Phase 5
+aggregate research evaluation and Phase 6 hosting are outside this implementation.

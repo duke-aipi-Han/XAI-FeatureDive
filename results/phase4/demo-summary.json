@@ -1,0 +1,163 @@
+{
+  "scope": "curated training examples; automated acceptance, not a student study",
+  "model_version": "phase1-v1",
+  "records": {
+    "evidence": {
+      "file": "evidence-acceptance-record.json",
+      "sha256": "877ad981c0aefaf3ac8979bb0ac605580c79bec3e52cf29d0747c54b7eef4af3"
+    },
+    "hidden": {
+      "file": "hidden-acceptance-record.json",
+      "sha256": "bee0e081d8b7374651b19bad0392743e47dc29526d241f353566f263a228f906"
+    },
+    "shortcut": {
+      "file": "shortcut-acceptance-record.json",
+      "sha256": "02d4ae2a0a91df434a716c1d7996f164aa0eed0a543a2b6bd6cfe183a77dfeb6"
+    }
+  },
+  "comparisons": {
+    "evidence": [
+      {
+        "selection": {
+          "kind": "patch",
+          "x": 8,
+          "y": 12,
+          "saliency_sum": 6.64638739079237
+        },
+        "sample_id": "fish:2617",
+        "target_margin_change": -0.03883934020996094,
+        "target_probability_point_change": 1.650148630142212,
+        "feedback": {
+          "observed": {
+            "direction": "little_change",
+            "magnitude": "small"
+          },
+          "directionMatches": false,
+          "magnitudeMatches": false
+        }
+      },
+      {
+        "selection": {
+          "kind": "patch",
+          "x": 20,
+          "y": 12,
+          "saliency_sum": 4.34451125562191
+        },
+        "sample_id": "fish:2617",
+        "target_margin_change": 1.221909523010254,
+        "target_probability_point_change": 7.1266770362854,
+        "feedback": {
+          "observed": {
+            "direction": "increase",
+            "magnitude": "moderate"
+          },
+          "directionMatches": false,
+          "magnitudeMatches": false
+        }
+      }
+    ],
+    "hidden": [
+      {
+        "selection": {
+          "kind": "channel",
+          "layer": "conv2",
+          "channel": 0,
+          "mean_activation": 1.1793981790542603
+        },
+        "sample_id": "airplane:142997",
+        "target_margin_change": 0.13413381576538086,
+        "target_probability_point_change": -0.26366710662841797,
+        "feedback": {
+          "observed": {
+            "direction": "increase",
+            "magnitude": "small"
+          },
+          "directionMatches": false,
+          "magnitudeMatches": false
+        }
+      },
+      {
+        "selection": {
+          "kind": "channel",
+          "layer": "conv2",
+          "channel": 1,
+          "mean_activation": 0.14878128468990326
+        },
+        "sample_id": "airplane:142997",
+        "target_margin_change": -2.1565918922424316,
+        "target_probability_point_change": -8.566784858703613,
+        "feedback": {
+          "observed": {
+            "direction": "decrease",
+            "magnitude": "large"
+          },
+          "directionMatches": true,
+          "magnitudeMatches": true
+        }
+      },
+      {
+        "selection": {
+          "kind": "channel",
+          "layer": "conv2",
+          "channel": 5,
+          "mean_activation": 0
+        },
+        "sample_id": "airplane:142997",
+        "target_margin_change": 0,
+        "target_probability_point_change": 0,
+        "feedback": {
+          "observed": {
+            "direction": "little_change",
+            "magnitude": "small"
+          },
+          "directionMatches": false,
+          "magnitudeMatches": false
+        }
+      }
+    ],
+    "shortcut": [
+      {
+        "background": "yellow",
+        "model": "shortcut",
+        "predicted_class": "airplane",
+        "target_probability_percent": 95.93300223350525,
+        "target_margin": 3.3176591396331787
+      },
+      {
+        "background": "yellow",
+        "model": "balanced",
+        "predicted_class": "airplane",
+        "target_probability_percent": 90.40795564651489,
+        "target_margin": 2.504424571990967
+      },
+      {
+        "background": "green",
+        "model": "shortcut",
+        "predicted_class": "cat",
+        "target_probability_percent": 47.21696078777313,
+        "target_margin": -0.06093120574951172
+      },
+      {
+        "background": "green",
+        "model": "balanced",
+        "predicted_class": "airplane",
+        "target_probability_percent": 95.43529748916626,
+        "target_margin": 3.494229555130005
+      },
+      {
+        "background": "blue",
+        "model": "shortcut",
+        "predicted_class": "fish",
+        "target_probability_percent": 12.94795572757721,
+        "target_margin": -1.8836867809295654
+      },
+      {
+        "background": "blue",
+        "model": "balanced",
+        "predicted_class": "airplane",
+        "target_probability_percent": 91.45610332489014,
+        "target_margin": 2.767813205718994
+      }
+    ]
+  }
+}

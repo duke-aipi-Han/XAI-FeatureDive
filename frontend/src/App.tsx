@@ -3,6 +3,7 @@ import type { FormEvent } from 'react';
 import { api } from './api';
 import PixelCanvas from './components/PixelCanvas';
 import Results from './components/Results';
+import ChallengeHub from './challenges/ChallengeHub';
 import { branchHistory, operationLabel, withIntervention } from './state';
 import { BACKGROUNDS, CLASSES, PLANES } from './types';
 import type { ActivationResult, Background, ClassName, ExperimentRequest, HistoryEntry, Intervention, Layer, Matrix, ModelCatalog, ModelID, Plane, Region, RGBImage, SaliencyResult, Sample } from './types';
@@ -18,6 +19,8 @@ const COPY: Record<Plane, { title: string; subtitle: string; tag: string; note: 
 const errorText = (error: unknown) => error instanceof Error ? error.message : 'Something went wrong. Please try again.';
 
 export default function App() {
+  const [mode, setMode] = useState<'explore' | 'challenges'>('explore');
+  const [challengeBusy, setChallengeBusy] = useState(false);
   const [catalog, setCatalog] = useState<ModelCatalog | null>(null);
   const [samples, setSamples] = useState<Sample[]>([]);
   const [draft, setDraft] = useState({ model_id: 'balanced' as ModelID, sample_id: '', background: 'green' as Background, target_class: 'cat' as ClassName });
@@ -75,7 +78,7 @@ export default function App() {
   }, [boot]);
 
   useEffect(() => {
-    if (!current || !['conv1', 'conv2', 'dense'].includes(plane)) return;
+    if (mode !== 'explore' || !current || !['conv1', 'conv2', 'dense'].includes(plane)) return;
     const controller = new AbortController(); let valid = true;
     setViewError('');
     const cached = activationCache.current.get(activationKey);
@@ -87,10 +90,10 @@ export default function App() {
       setActivation({ key: activationKey, data });
     }).catch(problem => { if (valid) setViewError(errorText(problem)); });
     return () => { valid = false; controller.abort(); };
-  }, [currentKey, plane, activationKey, retryView]); // Responses are keyed to the committed experiment, not selected channels.
+  }, [currentKey, plane, activationKey, retryView, mode]); // Responses are keyed to the committed experiment, not selected channels.
 
   useEffect(() => {
-    if (!current || !showSaliency || plane !== 'input') return;
+    if (mode !== 'explore' || !current || !showSaliency || plane !== 'input') return;
     const controller = new AbortController(); let valid = true;
     setViewError('');
     const cached = saliencyCache.current.get(currentKey);
@@ -102,10 +105,11 @@ export default function App() {
       setSaliency({ key: currentKey, data });
     }).catch(problem => { if (valid) setViewError(errorText(problem)); });
     return () => { valid = false; controller.abort(); };
-  }, [currentKey, showSaliency, plane, retryView]);
+  }, [currentKey, showSaliency, plane, retryView, mode]);
 
   useEffect(() => {
     function keys(event: KeyboardEvent) {
+      if (mode !== 'explore') return;
       const target = event.target as HTMLElement;
       if (target.closest('input, select, textarea, [contenteditable="true"], .is-interactive') || (target.closest('button') && !target.closest('.layer-nav'))) return;
       if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
@@ -122,7 +126,7 @@ export default function App() {
     }
     window.addEventListener('keydown', keys);
     return () => window.removeEventListener('keydown', keys);
-  }, []);
+  }, [mode]);
 
   async function start(event: FormEvent) {
     event.preventDefault();
@@ -177,13 +181,16 @@ export default function App() {
   }
 
   return <>
-    <a className="skip-link" href="#explorer">Skip to network explorer</a>
+    <a className="skip-link" href={mode === 'explore' ? '#explorer' : '#guided-challenges'}>Skip to {mode === 'explore' ? 'network explorer' : 'guided challenges'}</a>
     <header className="site-header"><a className="brand" href="/" aria-label="FeatureDive home"><span className="brand-icon" aria-hidden="true">F<span /></span><span>Feature<span>Dive</span><small>THE NEURAL NETWORK LAB</small></span></a>
-      <div className="header-status"><span className={`status-dot ${current ? 'connected' : ''}`} /><span>{current ? 'Real model · CPU inference' : 'Connecting to the lab'}</span><span className="version-tag">{catalog?.model_version ?? 'PHASE 3'}</span></div>
+      <div className="header-status"><span className={`status-dot ${current ? 'connected' : ''}`} /><span>{current ? 'Real model · CPU inference' : 'Connecting to the lab'}</span><span className="version-tag">{catalog?.model_version ?? 'PHASE 4'}</span></div>
     </header>
     <main>
       <section className="intro"><div><span className="eyebrow">EXPLORE THE NETWORK. CHALLENGE THE EXPLANATION.</span><h1>Look closer. <em>Change one thing.</em></h1><p>Follow a drawing through a real neural network. Inspect its responses, try an intervention, and compare the evidence.</p></div><div className="intro-index" aria-hidden="true"><span>OBSERVE</span><span>↘ INTERVENE</span><span>↘ MEASURE</span></div></section>
       {startupError ? <section className="startup-error" role="alert"><h2>The lab isn’t ready yet.</h2><p>{startupError}</p><p>Check that the local API is running and its model artifacts are available.</p><button onClick={() => setBoot(value => value + 1)}>Retry connection</button></section> : !current ? <section className="loading-lab" role="status"><span className="loading-block" />Loading the models and sample catalog…</section> : <>
+        <nav className="mode-switch" aria-label="Learning mode"><button aria-pressed={mode==='explore'} disabled={busy||challengeBusy} onClick={()=>setMode('explore')}>Free exploration</button><button aria-pressed={mode==='challenges'} disabled={busy||challengeBusy} onClick={()=>setMode('challenges')}>Guided challenges</button><span>Explore freely, or record predictions before you test.</span></nav>
+        <div hidden={mode!=='challenges'}><ChallengeHub samples={samples} active={mode==='challenges'} onBusy={setChallengeBusy} /></div>
+        <div hidden={mode!=='explore'}>
         <form className="experiment-bar" onSubmit={start} aria-label="New experiment settings">
           <span className="experiment-label"><span className="eyebrow">YOUR EXPERIMENT</span><span>24 training examples · illustrative</span></span>
           <label>Drawing<select aria-label="Drawing" value={draft.sample_id} disabled={busy} onChange={event => { const sample = samples.find(item => item.id === event.target.value)!; setDraft({ ...draft, sample_id: sample.id, target_class: sample.class }); }}>
@@ -234,6 +241,7 @@ export default function App() {
             <div className="plane-explanation"><span aria-hidden="true">i</span><p>{COPY[plane].note}</p></div><div className="layer-footer"><button disabled={position === 0} onClick={() => setPlane(PLANES[position - 1])}>← Previous layer</button><span>Use ← → to travel</span><button disabled={position === 4} onClick={() => setPlane(PLANES[position + 1])}>Next layer →</button></div>
           </section>
           <Results result={current} history={history} cursor={cursor} busy={busy} onRestore={restore} onReset={() => restore(0)} onExport={exportState} />
+        </div>
         </div>
       </>}
       <footer className="site-footer"><span>FEATUREDIVE <span>·</span> A Responsible AI learning lab</span><span>Activation ≠ attribution ≠ intervention evidence.</span><span>Quick, Draw! by Google · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a></span></footer>

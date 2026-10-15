@@ -8,7 +8,9 @@ The source of truth is [the implementation plan](FeatureDive-Codex-Implementatio
 
 ## Current status
 
-**Phase 3 is complete.** A React/TypeScript network explorer now connects the
+**Phase 4 is complete.** Three guided challenges now record hypotheses before
+real interventions, provide measured feedback, and collect reflections alongside
+the React/TypeScript network explorer. The browser interface connects the
 CPU interpretability engine and validated FastAPI API. Together they support activations, saliency, drawing erasure, fixed-color occlusion,
 channel ablation, and background swaps. Both final models were trained on this computer’s MPS
 accelerator using the full 30,000-source dataset (24,000 training, 3,000
@@ -17,7 +19,7 @@ Class order remains `cat = 0`, `fish = 1`, `airplane = 2`.
 
 Both versioned checkpoints load on CPU in eval mode. Repeating inference for all
 12,000 held-out source/color inputs per model produces exactly equal logits.
-Guided challenge flows and deployment await their respective phases.
+Aggregate research evaluation and deployment await their respective phases.
 
 | Phase 1 measurement | Balanced model | Shortcut model |
 | --- | ---: | ---: |
@@ -33,7 +35,7 @@ See the [dataset card](docs/data-card.md) and model cards for
 
 ![Phase 1 measured results](results/phase1/overview.png)
 
-## Run the Phase 3 browser interface
+## Run the browser interface and guided challenges
 
 Start the API from this folder:
 
@@ -55,6 +57,12 @@ Reset restores the original measured baseline. Input tools include saliency,
 drawing erasure, fixed-gray occlusion, and background swaps; all five layer
 views use real API responses. The browser supports undo/history restoration,
 explicit baseline changes, keyboard navigation, and JSON export.
+
+Choose **Guided challenges** to complete Find the Evidence, Inside the Hidden
+Layers, and The Shortcut Trap. Hypothesize before each test, compare measured
+results, then reflect. The [Phase 4 teacher guide and report](docs/phase4-challenges.md)
+provides a reproducible demo path, definitions, actual example results, and a
+student-friendly poster-board takeaway.
 
 The [Phase 3 report](docs/phase3-interface.md) documents state semantics,
 accessibility provisions, verification, screenshots, and limitations. The
@@ -187,7 +195,8 @@ reproduce the recorded dependency versions.
 configs/phase{0,1,2}.json    Training and serving configurations
 frontend/                   React/TypeScript explorer, canvas, tools, tests
 backend/                    Validated CPU API, stateless engine, source catalog
-experiments/phase2_demo.py   Reproducible challenge demonstrations
+experiments/phase2_demo.py   Reproducible engine demonstrations
+experiments/phase4_report.py Summarize real browser-exported challenge records
 ml/data_loader.py           Downloads, checksums, source manifest, split loading
 ml/backgrounds.py           Alpha compositing and training color assignments
 ml/model.py                 CNN with explicit post-ReLU activation/ablation taps
@@ -205,7 +214,8 @@ checkpoints/                Pilot checkpoints and phase1-v1 final checkpoints
 results/phase0/              Versioned pilot JSON, CSV, raw arrays, and PNGs
 results/phase1/              Final measured outputs and training assignments
 results/phase2/              Challenge scans, replay records, and figures
-results/phase3/              Browser checks and real interface screenshots
+results/phase3/              Preserved explorer acceptance evidence
+results/phase4/              Challenge records, measured summary, browser checks
 docs/                       Phase reports, dataset card, and model cards
 ```
 
@@ -229,5 +239,5 @@ This project samples bitmap rows, composites white strokes over colored
 backgrounds, and generates intervention variants. See [data/README.md](data/README.md)
 for provenance and source-format limitations.
 
-**Stop after Phase 3:** review the browser explorer before authorizing Phase 4
-guided challenge flows.
+**Stop after Phase 4:** guided challenges are ready for review. Phase 5 automated
+research evaluation has not started.

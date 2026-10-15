@@ -35,8 +35,8 @@ test('Phase 3 gate: drawing → Conv2 → channel → ablate → real scores →
   await page.getByRole('button', { name: 'Current', exact: true }).click();
   await page.getByRole('heading', { name: 'Look deeper.' }).click();
   expect(await page.locator('.skip-link').evaluate(element => getComputedStyle(element).top)).toBe('-100px');
-  await page.screenshot({ path: '../results/phase3/conv2-ablation.png', fullPage: true });
-  await writeFile('../results/phase3/gate-experiment.json', JSON.stringify({ baseline, modified }, null, 2) + '\n');
+  await page.screenshot({ path: '../results/phase4/conv2-ablation.png', fullPage: true });
+  await writeFile('../results/phase4/gate-experiment.json', JSON.stringify({ baseline, modified }, null, 2) + '\n');
   await page.getByRole('button', { name: 'Reset baseline' }).click();
   await expect(page.getByTestId('current-margin')).toHaveText(baseline.modified.target_logit_margin.toFixed(3));
   await expect(page.getByTestId('logit-airplane')).toHaveText(baseline.modified.logits[2].toFixed(3));
@@ -115,7 +115,7 @@ test('mobile layout fits and startup failures have a useful retry', async ({ pag
   await page.setViewportSize({ width: 390, height: 844 });
   await loaded(page);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  await page.screenshot({ path: '../results/phase3/mobile-input.png', fullPage: true });
+  await page.screenshot({ path: '../results/phase4/mobile-input.png', fullPage: true });
   await page.route('**/api/ready', route => route.fulfill({ status: 503, contentType: 'application/json', body: JSON.stringify({ detail: 'Models unavailable' }) }));
   await page.reload(); await expect(page.getByRole('alert')).toContainText('Models unavailable');
   await page.unroute('**/api/ready');
