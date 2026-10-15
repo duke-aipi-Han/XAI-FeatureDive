@@ -22,6 +22,12 @@ dist/
 !.env.example
 .aws/
 
+# Frontend dependencies and generated checks
+node_modules/
+*.tsbuildinfo
+playwright-report/
+test-results/
+
 # Generated research artifacts; keep directory placeholders
 /data/raw/*
 !/data/raw/.gitkeep

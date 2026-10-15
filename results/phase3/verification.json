@@ -1,0 +1,27 @@
+{
+  "phase3_gate_passed": true,
+  "actual_api_records_replayed_exactly": true,
+  "browser_tests_passed": 6,
+  "frontend_state_tests_passed": 7,
+  "python_tests_passed": 60,
+  "production_build_passed": true,
+  "prior_scientific_artifacts_preserved": 59,
+  "inference_device": "cpu",
+  "acceptance_sample": "airplane:142997",
+  "target_class": "airplane",
+  "baseline_margin": 4.940211296081543,
+  "modified_margin": 2.485243320465088,
+  "margin_change": -2.454967975616455,
+  "source_sha256": {
+    "frontend/src/state.ts": "83530351b5aea156e378037f09a849cba515935692b41ade0875df343d905095",
+    "frontend/src/api.ts": "722badf0e7d7b0fa24943c57157e75d987a82b1670d9db6ee2ad51d8688d0439",
+    "frontend/src/types.ts": "7d98f9453373c163aa900a046ce0184c07ec98c4dd1e410876274adc2d8389dd",
+    "frontend/src/state.test.ts": "abdc0a4ea5d7d07bba3d241bbb4e97bd1517e3a270fc92ea9cacf2fcd9074f02",
+    "frontend/src/App.tsx": "bc40b8d4634322c4d83925ce78bde5a0aeab2bc2c047e786ecc63ef53ee17078",
+    "frontend/src/main.tsx": "700cfe9e3aad835432060fb4d73588e298d743de270d81ee75b36cb3754021b4",
+    "frontend/src/components/Results.tsx": "38a9a68dac1d392283738ac659020fcd91752b9380d6756dd060b8ccd4c69650",
+    "frontend/src/components/PixelCanvas.tsx": "c45e8d4cc6b977b00d02be88121f251094e1e06988ce6f022db0a650b5ad75f8",
+    "frontend/src/styles.css": "cb0e5db5f124a5e7be3facad5cc7e015c0b920c85259921f5dc9b127b133081c",
+    "frontend/package-lock.json": "988c6ba9f2ce4f765b084742ff4c8d3cb254d59b0f8fc245e5404f5d6faed3a5"
+  }
+}

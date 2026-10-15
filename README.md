@@ -8,8 +8,8 @@ The source of truth is [the implementation plan](FeatureDive-Codex-Implementatio
 
 ## Current status
 
-**Phase 2 is complete.** The CPU interpretability engine and validated FastAPI
-API now support activations, saliency, drawing erasure, fixed-color occlusion,
+**Phase 3 is complete.** A React/TypeScript network explorer now connects the
+CPU interpretability engine and validated FastAPI API. Together they support activations, saliency, drawing erasure, fixed-color occlusion,
 channel ablation, and background swaps. Both final models were trained on this computer’s MPS
 accelerator using the full 30,000-source dataset (24,000 training, 3,000
 validation, 3,000 test). All pilot drawings and exact bitmap copies are excluded.
@@ -17,7 +17,7 @@ Class order remains `cat = 0`, `fish = 1`, `airplane = 2`.
 
 Both versioned checkpoints load on CPU in eval mode. Repeating inference for all
 12,000 held-out source/color inputs per model produces exactly equal logits.
-Frontend and deployment work await their respective phases.
+Guided challenge flows and deployment await their respective phases.
 
 | Phase 1 measurement | Balanced model | Shortcut model |
 | --- | ---: | ---: |
@@ -32,6 +32,39 @@ See the [dataset card](docs/data-card.md) and model cards for
 [shortcut](docs/model-cards/phase1-v1-shortcut.md).
 
 ![Phase 1 measured results](results/phase1/overview.png)
+
+## Run the Phase 3 browser interface
+
+Start the API from this folder:
+
+```sh
+uv sync --locked --extra dev
+uv run --locked uvicorn backend.main:app --host 127.0.0.1 --port 8000
+```
+
+In another terminal:
+
+```sh
+npm --prefix frontend ci
+npm --prefix frontend run dev
+```
+
+Open **http://127.0.0.1:5173/**. Choose a drawing and start an experiment, navigate
+to Conv2, select a channel, ablate it, and compare actual before/after scores.
+Reset restores the original measured baseline. Input tools include saliency,
+drawing erasure, fixed-gray occlusion, and background swaps; all five layer
+views use real API responses. The browser supports undo/history restoration,
+explicit baseline changes, keyboard navigation, and JSON export.
+
+The [Phase 3 report](docs/phase3-interface.md) documents state semantics,
+accessibility provisions, verification, screenshots, and limitations. The
+[frontend guide](frontend/README.md) covers build and browser test commands.
+
+```sh
+npm --prefix frontend run build
+npm --prefix frontend test
+npm --prefix frontend run test:e2e
+```
 
 ## Run the Phase 2 API and challenge demonstrations
 
@@ -152,6 +185,7 @@ reproduce the recorded dependency versions.
 
 ```text
 configs/phase{0,1,2}.json    Training and serving configurations
+frontend/                   React/TypeScript explorer, canvas, tools, tests
 backend/                    Validated CPU API, stateless engine, source catalog
 experiments/phase2_demo.py   Reproducible challenge demonstrations
 ml/data_loader.py           Downloads, checksums, source manifest, split loading
@@ -171,6 +205,7 @@ checkpoints/                Pilot checkpoints and phase1-v1 final checkpoints
 results/phase0/              Versioned pilot JSON, CSV, raw arrays, and PNGs
 results/phase1/              Final measured outputs and training assignments
 results/phase2/              Challenge scans, replay records, and figures
+results/phase3/              Browser checks and real interface screenshots
 docs/                       Phase reports, dataset card, and model cards
 ```
 
@@ -194,5 +229,5 @@ This project samples bitmap rows, composites white strokes over colored
 backgrounds, and generates intervention variants. See [data/README.md](data/README.md)
 for provenance and source-format limitations.
 
-**Stop after Phase 2:** review the engine, API, and challenge demonstrations
-before authorizing Phase 3 frontend development.
+**Stop after Phase 3:** review the browser explorer before authorizing Phase 4
+guided challenge flows.
