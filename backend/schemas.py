@@ -157,3 +157,37 @@ class SaliencyResponse(StrictModel):
     aggregation: Literal['sum_abs_rgb_class_logit_gradients'] = 'sum_abs_rgb_class_logit_gradients'
     normalization: Literal['none'] = 'none'
     kind: Literal['local_sensitivity_attribution'] = 'local_sensitivity_attribution'
+
+
+class HintRequest(ExperimentRequest):
+    @model_validator(mode='after')
+    def unmodified_baseline(self):
+        if self.interventions:
+            raise ValueError('Hints require an unmodified baseline; use interventions=[]')
+        return self
+
+
+class ChannelHint(StrictModel):
+    layer: Literal['conv1', 'conv2']
+    channel: int
+    mean_activation: float
+    estimated_support: float
+    estimated_margin_change: float
+    rank: int
+
+
+class ErasePatchHint(StrictModel):
+    rectangle: Rectangle
+    estimated_support: float
+    estimated_margin_change: float
+
+
+class HintResponse(StrictModel):
+    experiment: ExperimentResponse
+    kind: Literal['first_order_target_margin_hint'] = 'first_order_target_margin_hint'
+    reference: Literal['original_baseline'] = 'original_baseline'
+    units: Literal['logit_margin'] = 'logit_margin'
+    channels: list[ChannelHint]
+    erase_support: list[list[float]]
+    suggested_patch: ErasePatchHint | None
+    brush_size: Literal[4] = 4

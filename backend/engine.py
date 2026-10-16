@@ -13,12 +13,12 @@ from backend.catalog import DEFAULT_CONFIG
 from backend.schemas import (
     ActivationRequest, ActivationResponse, BackgroundSwap, ChannelAblation,
     Comparison, DrawingErasure, ExperimentRequest, ExperimentResponse,
-    Occlusion, Prediction, Region, SaliencyResponse,
+    Occlusion, Prediction, Region, SaliencyResponse, HintRequest, HintResponse,
 )
 from ml.backgrounds import COLOR_NAMES, RGB
 from ml.common import CLASSES, ROOT, read_json, sha256
 from ml.data_loader import validate_manifest
-from ml.interpretability import margins, saliency
+from ml.interpretability import margins, saliency, decision_support_hints
 from ml.train import load_checkpoint
 
 
@@ -223,6 +223,33 @@ class InterpretabilityEngine:
             baseline_scores=saliency(model, baseline.rgb, target)[0].tolist(),
             modified_scores=saliency(model, current.rgb, target, ablation=current.ablation)[0].tolist(),
         )
+
+    def hints(self, request: HintRequest) -> HintResponse:
+        if request.interventions:
+            raise ValueError('Hints require an unmodified baseline')
+        rendered = self.render(request)
+        color = torch.tensor(RGB[COLOR_NAMES.index(request.background)]).float() / 255
+        values = decision_support_hints(self.models[request.model_id], rendered.rgb,
+            CLASSES.index(request.target_class), color)
+        channels = []
+        for layer, scores in values['channels'].items():
+            for channel, support in enumerate(scores['support'].tolist()):
+                channels.append(dict(layer=layer, channel=channel, estimated_support=support,
+                    estimated_margin_change=-support,
+                    mean_activation=float(scores['mean_activation'][channel])))
+        channels.sort(key=lambda row: -row['estimated_support'])
+        for row in channels:
+            row['rank'] = 1 + sum(other['estimated_support'] > row['estimated_support'] for other in channels)
+        support = values['erase_support']
+        # All overlapping 4x4 windows; the ranking uses baseline gradients only.
+        windows = support.unfold(0, 4, 1).unfold(1, 4, 1).sum((-1, -2))
+        index = int(windows.argmax())
+        y, x = divmod(index, 25)
+        best = float(windows[y, x])
+        patch = dict(rectangle=dict(x=x, y=y, width=4, height=4),
+            estimated_support=best, estimated_margin_change=-best) if best > 0 else None
+        return HintResponse(experiment=self.infer(request), channels=channels,
+            erase_support=support.tolist(), suggested_patch=patch)
 
     def sample_catalog(self) -> list[dict]:
         return [{**row, 'role': 'illustrative_training_example'} for row in self.samples.values()]

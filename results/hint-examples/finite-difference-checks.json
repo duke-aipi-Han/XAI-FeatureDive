@@ -1,0 +1,14 @@
+[
+  {
+    "kind": "channel_gate_finite_difference",
+    "epsilon": 0.001,
+    "estimate": -6.1075873374938965,
+    "finite_difference": -6.107807159423828
+  },
+  {
+    "kind": "stroke_direction_finite_difference",
+    "epsilon": 0.001,
+    "estimate": -3.1615519523620605,
+    "finite_difference": -3.161191940307617
+  }
+]

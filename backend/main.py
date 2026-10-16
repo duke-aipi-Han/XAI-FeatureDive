@@ -10,7 +10,7 @@ from backend.engine import InterpretabilityEngine
 from backend.limits import RequestLimits
 from backend.schemas import (
     ActivationRequest, ActivationResponse, ExperimentRequest,
-    ExperimentResponse, SaliencyResponse,
+    ExperimentResponse, SaliencyResponse, HintRequest, HintResponse,
 )
 from ml.common import read_json
 
@@ -76,6 +76,10 @@ def create_app(config_path: Path = DEFAULT_CONFIG, engine_factory=Interpretabili
     @app.post('/api/saliency', response_model=SaliencyResponse)
     def saliency_route(body: ExperimentRequest, service: InterpretabilityEngine = Depends(engine)):
         return invoke(service.saliency, body)
+
+    @app.post('/api/hints', response_model=HintResponse)
+    def hints(body: HintRequest, service: InterpretabilityEngine = Depends(engine)):
+        return invoke(service.hints, body)
 
     return app
 

@@ -6,10 +6,10 @@ import { pointerPixel, selectionRegion } from '../state';
 type Point = { x: number; y: number };
 export interface PixelCanvasProps {
   rgb?: RGBImage; values?: Matrix; upper?: number; label: string;
-  saliency?: Matrix; opacity?: number; grid?: boolean; interactive?: boolean;
+  support?: Matrix; saliency?: Matrix; opacity?: number; grid?: boolean; interactive?: boolean;
   mode?: 'pixel' | 'patch' | 'rectangle'; onSelect?: (region: Region) => void;
 }
-export default function PixelCanvas({ rgb, values, upper, label, saliency, opacity = .55, grid = false, interactive = false, mode = 'patch', onSelect }: PixelCanvasProps) {
+export default function PixelCanvas({ rgb, values, upper, label, saliency, support, opacity = .55, grid = false, interactive = false, mode = 'patch', onSelect }: PixelCanvasProps) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const [anchor, setAnchor] = useState<Point | null>(null);
   const [point, setPoint] = useState<Point | null>(null);
@@ -22,17 +22,19 @@ export default function PixelCanvas({ rgb, values, upper, label, saliency, opaci
     const image = context.createImageData(width, height);
     const max = upper ?? (values ? Math.max(...values.flat(), 1e-8) : 1);
     const saliencyMax = saliency ? Math.max(...saliency.flat(), 1e-8) : 1;
+    const supportMax = support ? Math.max(...support.flat().map(Math.abs), 1e-8) : 1;
     for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
       const index = (y * width + x) * 4;
       const fraction = values ? Math.max(0, Math.min(1, values[y][x] / Math.max(max, 1e-8))) : 0;
       // Labeled sequential scale: deep teal → pale lime, zero stays dark.
       const color = values ? [20 + fraction * 186, 52 + fraction * 189, 57 + fraction * 72] : rgb?.map(channel => channel[y][x] * 255) ?? [20, 52, 57];
-      const blend = saliency ? saliency[y][x] / saliencyMax * opacity : 0;
-      for (let channel = 0; channel < 3; channel++) image.data[index + channel] = color[channel] * (1 - blend) + [255, 83, 80][channel] * blend;
+      const blend = support ? Math.abs(support[y][x]) / supportMax * opacity : saliency ? saliency[y][x] / saliencyMax * opacity : 0;
+      const overlay = support ? support[y][x]>=0 ? [235,86,62] : [60,133,210] : [255,83,80];
+      for (let channel = 0; channel < 3; channel++) image.data[index + channel] = color[channel] * (1 - blend) + overlay[channel] * blend;
       image.data[index + 3] = 255;
     }
     context.putImageData(image, 0, 0);
-  }, [rgb, values, upper, width, height, saliency, opacity]);
+  }, [rgb, values, upper, width, height, saliency, support, opacity]);
   function pixel(event: PointerEvent<HTMLDivElement>) {
     return pointerPixel(event.clientX, event.clientY, event.currentTarget.getBoundingClientRect());
   }

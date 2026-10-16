@@ -8,8 +8,9 @@ The source of truth is [the implementation plan](FeatureDive-Codex-Implementatio
 
 ## Current status
 
-**Phase 4 is complete.** Three guided challenges now record hypotheses before
-real interventions, provide measured feedback, and collect reflections alongside
+**Phase 4 is complete.** Three quick rounds now use **Guess → Test → Discover**:
+one prediction, one test, and an immediate measured lesson. Details and reflection
+are optional. Longer investigations remain under Teacher options alongside
 the React/TypeScript network explorer. The browser interface connects the
 CPU interpretability engine and validated FastAPI API. Together they support activations, saliency, drawing erasure, fixed-color occlusion,
 channel ablation, and background swaps. Both final models were trained on this computer’s MPS
@@ -37,11 +38,15 @@ See the [dataset card](docs/data-card.md) and model cards for
 
 ## Run the browser interface and guided challenges
 
+Free exploration opens with **Feature Radar** on the fish/channel example.
+Choose **Pixel hunt · airplane** for **Eraser Vision**, a signed stroke-support
+overlay and suggested brush test. See the [power-up guide](docs/hint-powerups.md).
+
 Start the API from this folder:
 
 ```sh
 uv sync --locked --extra dev
-uv run --locked uvicorn backend.main:app --host 127.0.0.1 --port 8000
+uv run --locked uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload
 ```
 
 In another terminal:
@@ -58,9 +63,11 @@ drawing erasure, fixed-gray occlusion, and background swaps; all five layer
 views use real API responses. The browser supports undo/history restoration,
 explicit baseline changes, keyboard navigation, and JSON export.
 
-Choose **Guided challenges** to complete Find the Evidence, Inside the Hidden
-Layers, and The Shortcut Trap. Hypothesize before each test, compare measured
-results, then reflect. The [Phase 4 teacher guide and report](docs/phase4-challenges.md)
+Choose **Guided challenges** for the quick versions of Find the Evidence, Inside
+the Hidden Layers, and The Shortcut Trap. See the [quick-round guide](docs/quick-rounds.md).
+Free exploration offers three **Load … example** presets with verified class-flipping
+channel ablations; load a drawing, then press the selected **Ablate channel** button.
+Advanced model/background settings and detailed scores are collapsed by default. The [Phase 4 teacher guide and report](docs/phase4-challenges.md)
 provides a reproducible demo path, definitions, actual example results, and a
 student-friendly poster-board takeaway.
 
@@ -215,7 +222,10 @@ results/phase0/              Versioned pilot JSON, CSV, raw arrays, and PNGs
 results/phase1/              Final measured outputs and training assignments
 results/phase2/              Challenge scans, replay records, and figures
 results/phase3/              Preserved explorer acceptance evidence
-results/phase4/              Challenge records, measured summary, browser checks
+results/phase4/              Original longer-challenge acceptance evidence
+results/phase4-quick/        Quick-round records and class-flip examples
+results/hint-examples/       Baseline-only hint curation and engine replays
+results/powerups/            Hint power-up UI acceptance evidence
 docs/                       Phase reports, dataset card, and model cards
 ```
 

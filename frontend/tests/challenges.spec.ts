@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 import type { Locator, Page } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import { effectCategory, sensitivity } from '../src/challenges/state';
@@ -12,6 +12,8 @@ async function open(page: Page, name: string) {
   await expect(page.locator('.skip-link')).toBeFocused();
   await expect(page.locator('.skip-link')).toHaveCSS('clip-path','none');
   await page.getByRole('button', {name:'Guided challenges',exact:true}).click();
+  await page.getByText('Teacher options',{exact:true}).click();
+  await page.getByRole('button',{name:'Longer investigations',exact:true}).click();
   await page.getByRole('button', {name:`Open ${name}`,exact:true}).click();
   const lesson = page.getByRole('region',{name,exact:true});
   await expect(lesson).toHaveAttribute('aria-busy','false');
@@ -39,7 +41,7 @@ async function finish(page: Page, lesson: Locator, id: string) {
   const event = page.waitForEvent('download');
   await lesson.getByRole('button',{name:'Download challenge record',exact:true}).click();
   const download = await event;
-  const file = `../results/phase4/${id}-acceptance-record.json`;
+  const file = `../results/powerups/${id}-acceptance-record.json`;
   await download.saveAs(file);
   return JSON.parse(await readFile(file,'utf8')) as CompletionRecord;
 }
@@ -62,7 +64,7 @@ test('Find the Evidence: saved hypotheses precede two real independent patch mea
   expect(second.request.interventions).toHaveLength(1);
   await lesson.getByRole('heading',{level:2}).click();
   await expect(page.locator('.skip-link')).toHaveCSS('top','-100px');
-  await page.screenshot({path:'../results/phase4/evidence-comparison.png',fullPage:true});
+  await page.screenshot({path:'../results/powerups/evidence-comparison.png',fullPage:true});
   await lesson.getByRole('button',{name:'Reflect on the evidence →'}).click();
   const record = await finish(page,lesson,'evidence');
   expect(record.trials).toHaveLength(2);
@@ -93,7 +95,7 @@ test('Hidden Layers: inspect both layers; compare two channels with honest measu
   expect(second.baseline.logits).toEqual(first.baseline.logits);
   await lesson.getByRole('heading',{level:2}).click();
   await expect(page.locator('.skip-link')).toHaveCSS('top','-100px');
-  await page.screenshot({path:'../results/phase4/hidden-comparison.png',fullPage:true});
+  await page.screenshot({path:'../results/powerups/hidden-comparison.png',fullPage:true});
   // An already silent channel is a genuine null intervention, not a fallback.
   await lesson.getByRole('button',{name:'Compare another channel',exact:true}).click();
   await expect(lesson.getByRole('button',{name:'Choose channel 5',exact:true})).toContainText('Mean 0.0000');
@@ -135,12 +137,12 @@ test('Shortcut Trap: A/B stays concealed until identification; swaps and ranges 
   await expect(lesson.getByRole('region',{name:'Training regimes revealed'})).toBeVisible();
   await lesson.getByRole('heading',{level:2}).click();
   await expect(page.locator('.skip-link')).toHaveCSS('top','-100px');
-  await page.screenshot({path:'../results/phase4/shortcut-reveal.png',fullPage:true});
+  await page.screenshot({path:'../results/powerups/shortcut-reveal.png',fullPage:true});
   await lesson.getByLabel('Shortcut reflection').fill('Automated acceptance example: changing only the background altered the measured responses differently. This single training drawing does not measure generalization or student learning.');
   await lesson.getByRole('button',{name:'Complete challenge',exact:true}).click();
   const event = page.waitForEvent('download');
   await lesson.getByRole('button',{name:'Download challenge record',exact:true}).click();
-  const download = await event; const path='../results/phase4/shortcut-acceptance-record.json'; await download.saveAs(path);
+  const download = await event; const path='../results/powerups/shortcut-acceptance-record.json'; await download.saveAs(path);
   const record = JSON.parse(await readFile(path,'utf8')) as CompletionRecord;
   expect(record.observations).toHaveLength(3);
   expect(record.hypothesis?.model).toBe('similar');
@@ -184,7 +186,7 @@ test('failure retry and mode switching preserve hypotheses; mobile selection sup
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
   await lesson.getByRole('heading',{level:2}).click();
   await expect(page.locator('.skip-link')).toHaveCSS('top','-100px');
-  await page.screenshot({path:'../results/phase4/mobile-challenge.png',fullPage:true});
+  await page.screenshot({path:'../results/powerups/mobile-challenge.png',fullPage:true});
   await page.getByRole('button',{name:'Open Inside the Hidden Layers'}).click();
   await expect(page.getByRole('region',{name:'Inside the Hidden Layers',exact:true})).toHaveAttribute('aria-busy','false');
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);

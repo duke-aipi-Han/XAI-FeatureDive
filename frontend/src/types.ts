@@ -60,3 +60,13 @@ export interface ModelCatalog {
   inference_device: 'cpu';
 }
 export interface HistoryEntry { label: string; result: ExperimentResult }
+export interface ChannelHint {
+  layer: 'conv1'|'conv2'; channel: number; mean_activation: number;
+  estimated_support: number; estimated_margin_change: number; rank: number;
+}
+export interface HintResult {
+  experiment: ExperimentResult; kind: 'first_order_target_margin_hint';
+  reference: 'original_baseline'; units: 'logit_margin';
+  channels: ChannelHint[]; erase_support: Matrix; brush_size: 4;
+  suggested_patch: { rectangle: {x:number;y:number;width:number;height:number}; estimated_support:number;estimated_margin_change:number } | null;
+}

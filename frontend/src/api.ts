@@ -1,4 +1,4 @@
-import type { ActivationResult, ExperimentRequest, ExperimentResult, Layer, ModelCatalog, SaliencyResult, Sample } from './types';
+import type { ActivationResult, ExperimentRequest, ExperimentResult, Layer, ModelCatalog, SaliencyResult, Sample, HintResult } from './types';
 
 async function json<T>(path: string, body?: unknown, signal?: AbortSignal): Promise<T> {
   const response = await fetch(`/api/${path}`, {
@@ -23,5 +23,6 @@ export const api = {
   ready: (signal?: AbortSignal) => json<{ status: string }>('ready', undefined, signal),
   infer: (request: ExperimentRequest) => json<ExperimentResult>(request.interventions.length ? 'intervene' : 'infer', request),
   activations: (request: ExperimentRequest, layer: Layer, signal?: AbortSignal) => json<ActivationResult>('activations', { ...request, layer }, signal),
+  hints: (request: ExperimentRequest, signal?: AbortSignal) => json<HintResult>('hints', request, signal),
   saliency: (request: ExperimentRequest, signal?: AbortSignal) => json<SaliencyResult>('saliency', request, signal),
 };

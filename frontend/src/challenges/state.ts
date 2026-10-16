@@ -62,7 +62,7 @@ export function sensitivityWinner(a: number, b: number): AnonymousID | 'similar'
   // Explicit teaching tolerance; this is not a population-significance test.
   return Math.abs(a - b) <= 1 ? 'similar' : a > b ? 'A' : 'B';
 }
-export function downloadRecord(record: CompletionRecord) {
+export function downloadRecord(record: { challenge_id: ChallengeID }) {
   const url = URL.createObjectURL(new Blob([JSON.stringify(record, null, 2)], { type: 'application/json' }));
   const anchor = document.createElement('a'); anchor.href = url; anchor.download = `featuredive-challenge-${record.challenge_id}.json`; anchor.click(); URL.revokeObjectURL(url);
 }

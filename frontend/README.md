@@ -1,13 +1,15 @@
 # FeatureDive frontend
 
 Local React + TypeScript / Vite interface for the real CPU inference API.
-See the [Phase 4 challenge guide](../docs/phase4-challenges.md) and [Phase 3 documentation](../docs/phase3-interface.md) for interaction details
+The default explorer opens on Feature Radar; Pixel hunt loads Eraser Vision.
+See the [hint power-up guide](../docs/hint-powerups.md).
+See the [quick-round guide](../docs/quick-rounds.md), [Phase 4 challenge guide](../docs/phase4-challenges.md) and [Phase 3 documentation](../docs/phase3-interface.md) for interaction details
 and browser acceptance evidence.
 
 From the repository root, run the API in one terminal:
 
 ```sh
-uv run --locked uvicorn backend.main:app --host 127.0.0.1 --port 8000
+uv run --locked uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload
 ```
 
 Then:
@@ -37,13 +39,26 @@ contract; `state.ts` handles immutable request/history transformations.
 handles crisp rendering and source-coordinate selection, and `Results.tsx`
 shows measured comparisons, history, and export. CSS controls 2.5D presentation,
 responsive layout, focus styles, and reduced-motion behavior.
-`src/challenges/` provides three guided investigations, separate recorded
+`src/challenges/QuickRound.tsx` provides the default quick game: predict with a
+tap, run a paired test, and reveal the measured lesson. Reflection and evidence
+are optional. `quick.ts` computes feedback from the real outputs. The original
+longer investigations remain under **Teacher options**.
+`src/challenges/` provides separate recorded
 hypotheses and measurements, dynamic feedback, completion tracking, and local
 JSON export. A/B assignments in the Shortcut Trap are randomized and revealed
-only after the visitor records an identification and evidence. Session progress
+after the quick test, or after recorded identification/evidence in a longer investigation. Session progress
 is kept in browser memory and clears on reload. Hypotheses/reflections are never
-sent to the API. Browser acceptance artifacts are written to `results/phase4/`.
+sent to the API. Browser acceptance artifacts are written to `results/powerups/`. The browser
+command builds automatically, then uses production preview 5174 and isolated API
+8001. Normal development stays on 5173/8000. The suite paces API requests to respect the normal
+rate limit; a full run may pause between tests. `src/examples.ts` defines three
+free-exploration presets whose real single-channel ablations flip the class.
 
 The frontend never trains or performs model inference locally in JavaScript.
 All scientific values are returned by the registered PyTorch API. Phase 5
 aggregate research evaluation and Phase 6 hosting are outside this implementation.
+
+`components/HintPanel.tsx` renders real baseline-only channel rankings and brush
+recommendations. `PixelCanvas.tsx` supports a signed coral/blue erasure overlay.
+`POST /api/hints` supplies all values from the unchanged input; exports retain
+the original hints separately from the measured intervention.

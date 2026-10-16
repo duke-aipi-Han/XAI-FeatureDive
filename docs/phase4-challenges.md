@@ -1,5 +1,10 @@
 # Phase 4 — Guided investigations
 
+The default interface now uses [quick rounds](quick-rounds.md). To use the longer
+investigations documented below, select **Guided challenges → Teacher options →
+Longer investigations**. The original recorded evidence below predates the quick
+revision and remains preserved.
+
 Phase 4 adds three complete challenges to the local browser app. Choose
 **Guided challenges** beside **Free exploration**. Each challenge follows
 **Observe → Hypothesize → Intervene → Evaluate → Reflect**, uses the saved
@@ -29,7 +34,8 @@ npm --prefix frontend ci
 npm --prefix frontend run dev
 ```
 
-Open **http://127.0.0.1:5173/** and select **Guided challenges**. The visitor
+Open **http://127.0.0.1:5173/** and select **Guided challenges**, then
+**Teacher options → Longer investigations** for the paths below. The visitor
 needs only a browser. Each lesson includes a glossary, prompts, a five-step
 tracker, numeric comparisons, and a reflection. A correct guess is not required
 to complete it. Completion means making the required comparisons and writing
