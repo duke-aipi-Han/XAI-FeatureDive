@@ -19,20 +19,20 @@ test('default Feature Radar ranks both layers, selects channels, and separates e
   expect(hints.experiment.request.background).toBe('blue');
   expect(hints.experiment.request.interventions).toEqual([]);
   await expect(page.getByLabel('Feature Radar',{exact:true})).toHaveAttribute('aria-pressed','true');
-  await expect(page.getByRole('button',{name:'Ablate channel 7',exact:true})).toBeEnabled();
+  await expect(page.getByRole('button',{name:'Switch off channel 7',exact:true})).toBeEnabled();
   await expect(page.getByTestId('selected-channel-hint')).toContainText(hints.channels[0].estimated_margin_change.toFixed(3));
   const conv2=hints.channels.find(row=>row.layer==='conv2')!;
   if(hints.channels.indexOf(conv2)>=3)await page.getByText('All 24 channels',{exact:true}).click();
   await page.getByRole('button',{name:`Hint conv2 channel ${conv2.channel}`,exact:true}).click();
-  await expect(page.getByRole('button',{name:'03 CONV2 16 feature maps'})).toHaveAttribute('aria-current','step');
+  await expect(page.getByRole('button',{name:'Layer 2 · CONV2 · 16 feature maps'})).toHaveAttribute('aria-current','step');
   await expect(page.getByRole('button',{name:`Select channel ${conv2.channel}`,exact:true})).toHaveAttribute('aria-pressed','true');
   await page.getByRole('button',{name:'Hint conv1 channel 7',exact:true}).click();
   expect(interventions).toBe(0);
-  await expect(page.getByRole('button',{name:'Ablate channel 7',exact:true})).toBeEnabled();
+  await expect(page.getByRole('button',{name:'Switch off channel 7',exact:true})).toBeEnabled();
   await page.getByRole('heading',{name:'Patterns, one layer in.',exact:true}).click();
-  await page.screenshot({path:'../results/powerups/feature-radar.png',fullPage:true});
+  await page.screenshot({path:'../results/arcade-ux/feature-radar.png',fullPage:true});
   const response=page.waitForResponse(r=>r.url().endsWith('/api/intervene'));
-  await page.getByRole('button',{name:'Ablate channel 7',exact:true}).click();
+  await page.getByRole('button',{name:'Switch off channel 7',exact:true}).click();
   const result=await (await response).json();
   expect(result.comparison.classification_flip).toBe(true);
   await expect(page.getByTestId('current-prediction')).toHaveText(result.modified.predicted_class);
@@ -40,7 +40,7 @@ test('default Feature Radar ranks both layers, selects channels, and separates e
   await expect(page.getByTestId('selected-channel-hint')).toContainText(hints.channels[0].estimated_margin_change.toFixed(3));
   expect(hintCalls).toBe(1);
   const event=page.waitForEvent('download');await page.getByRole('button',{name:'Export experiment JSON',exact:false}).click();
-  const path='../results/powerups/feature-radar-experiment.json';await(await event).saveAs(path);
+  const path='../results/arcade-ux/feature-radar-experiment.json';await(await event).saveAs(path);
   const exported=JSON.parse(await readFile(path,'utf8'));
   expect(exported.baseline_hints.reference).toBe('original_baseline');
   expect(exported.baseline_hints.experiment.request.interventions).toEqual([]);
@@ -57,7 +57,7 @@ test('Pixel hunt defaults to Eraser Vision, uses its real suggested mask, and re
   await expect(page.getByTestId('erase-hint-estimate')).toContainText(hints.suggested_patch!.estimated_margin_change.toFixed(3));
   await expect(page.locator('.hint-drawing-patch')).toBeVisible();
   await page.getByRole('heading',{name:'Start with the pixels.',exact:true}).click();
-  await page.screenshot({path:'../results/powerups/eraser-vision.png',fullPage:true});
+  await page.screenshot({path:'../results/arcade-ux/eraser-vision.png',fullPage:true});
   const measured=page.waitForResponse(r=>r.url().endsWith('/api/intervene'));
   await page.getByRole('button',{name:'Erase hinted patch',exact:true}).click();
   const result=await(await measured).json();
@@ -68,12 +68,13 @@ test('Pixel hunt defaults to Eraser Vision, uses its real suggested mask, and re
   await expect(page.getByRole('button',{name:'Erase hinted patch',exact:true})).toBeDisabled();
   await expect(page.getByText('Eraser Vision overlay is paused on the changed drawing.',{exact:false})).toBeVisible();
   const event=page.waitForEvent('download');await page.getByRole('button',{name:'Export experiment JSON',exact:false}).click();
-  await(await event).saveAs('../results/powerups/eraser-vision-experiment.json');
-  await page.getByRole('button',{name:'Reset baseline',exact:false}).click();
+  await(await event).saveAs('../results/arcade-ux/eraser-vision-experiment.json');
+  await page.getByRole('button',{name:'Reset & try again',exact:false}).click();
   await expect(page.getByTestId('current-prediction')).toHaveText('airplane');
   await expect(page.locator('.hint-drawing-patch')).toBeVisible();
   await expect(page.getByRole('button',{name:'Erase hinted patch',exact:true})).toBeEnabled();
   // Switching attribution tools makes their different meanings explicit.
+  await page.getByText('More drawing tools',{exact:true}).click();
   await page.getByRole('button',{name:/Saliency Scope/}).click();
   await expect(page.getByLabel('Eraser Vision',{exact:true})).toHaveAttribute('aria-pressed','false');
   await page.getByLabel('Eraser Vision',{exact:true}).click();
@@ -101,10 +102,40 @@ test('power-ups fit on mobile and a hint can be selected with the keyboard',asyn
   await page.setViewportSize({width:390,height:844});await loaded(page);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
   await page.getByRole('button',{name:'Hint conv1 channel 7',exact:true}).focus();await page.keyboard.press('Enter');
-  await expect(page.getByRole('button',{name:'Ablate channel 7',exact:true})).toBeEnabled();
+  await expect(page.getByRole('button',{name:'Switch off channel 7',exact:true})).toBeEnabled();
   await page.getByRole('heading',{name:'Patterns, one layer in.',exact:true}).click();
-  await page.screenshot({path:'../results/powerups/powerups-mobile.png',fullPage:true});
+  await page.screenshot({path:'../results/arcade-ux/powerups-mobile.png',fullPage:true});
   await page.getByRole('button',{name:'Pixel hunt · airplane',exact:true}).click();
   await expect(page.getByRole('button',{name:'Erase hinted patch',exact:true})).toBeEnabled();
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+});
+
+test('the stage leads; tools follow the view; reset is always ready and history is gone',async({page})=>{
+  await loaded(page);
+  const stage=await page.getByRole('region',{name:'Experiment stage',exact:true}).boundingBox();
+  const dock=await page.getByRole('complementary',{name:'Experiment tools',exact:true}).boundingBox();
+  const map=await page.getByRole('img',{name:'conv1 channel 7 current activation',exact:true}).boundingBox();
+  expect(stage!.width).toBeGreaterThan(dock!.width*2);
+  expect(map!.width).toBeGreaterThan(400);
+  await expect(page.getByLabel('Eraser Vision',{exact:true})).toHaveCount(0);
+  await expect(page.getByRole('button',{name:'Pixel Eraser',exact:true})).toHaveCount(0);
+  await expect(page.getByRole('button',{name:/Undo/})).toHaveCount(0);
+  await expect(page.getByText('Experiment history',{exact:true})).toHaveCount(0);
+  await expect(page.getByRole('button',{name:'Reset & try again',exact:true})).toBeVisible();
+  for(const name of ['Hidden · DENSE · 32 neurons','Answer · OUTPUT · 3 classes']){
+    await page.getByRole('button',{name,exact:true}).click();
+    await expect(page.getByLabel('Feature Radar',{exact:true})).toHaveCount(0);
+    await expect(page.getByLabel('Eraser Vision',{exact:true})).toHaveCount(0);
+    await expect(page.getByRole('button',{name:/Switch off channel/})).toHaveCount(0);
+  }
+  await page.getByRole('button',{name:'Pixel hunt · airplane',exact:false}).click();
+  await expect(page.getByRole('button',{name:'Erase hinted patch',exact:true})).toBeEnabled();
+  await expect(page.getByLabel('Feature Radar',{exact:true})).toHaveCount(0);
+  await expect(page.getByRole('button',{name:'Pixel Eraser',exact:true})).toBeVisible();
+  await page.getByRole('button',{name:'Baseline',exact:true}).click();
+  await expect(page.getByRole('button',{name:'Erase hinted patch',exact:true})).toBeDisabled();
+  await expect(page.getByRole('group',{name:/28 by 28 drawing/})).toHaveCount(0);
+  await page.getByRole('button',{name:'Reset & try again',exact:true}).click();
+  await expect(page.getByRole('button',{name:'Current',exact:true})).toHaveAttribute('aria-pressed','true');
+  await expect(page.getByRole('button',{name:'Erase hinted patch',exact:true})).toBeEnabled();
 });

@@ -35,11 +35,11 @@ for(const id of ['evidence','hidden','shortcut'] as const) {
     expect(interventions).toBe(id==='shortcut'?4:2);
     await expect(page.getByLabel('1 of 3 challenges completed',{exact:true})).toBeVisible();
     await round.getByRole('heading',{level:2}).click();
-    await page.screenshot({path:`../results/powerups/quick-${id}.png`,fullPage:true});
+    await page.screenshot({path:`../results/arcade-ux/quick-${id}.png`,fullPage:true});
     await round.getByText('See the evidence / save this round',{exact:true}).click();
     const download=page.waitForEvent('download');
     await round.getByRole('button',{name:'Download round record',exact:true}).click();
-    const path=`../results/powerups/quick-${id}-record.json`;await (await download).saveAs(path);
+    const path=`../results/arcade-ux/quick-${id}-record.json`;await (await download).saveAs(path);
     const record=JSON.parse(await readFile(path,'utf8')) as QuickRecord;
     expect(record.reflection).toBe('');expect(record.hypothesis.choice).toBe('A');
     expect(Date.parse(record.hypothesis.recorded_at)).toBeLessThanOrEqual(Date.parse(record.requested_at));
@@ -79,7 +79,7 @@ test('a failed paired quick test retains the guess and publishes no partial less
   await expect(round.getByTestId('quick-outcome')).toBeVisible();
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
   await round.getByRole('heading',{level:2}).click();
-  await page.screenshot({path:'../results/powerups/quick-mobile.png',fullPage:true});
+  await page.screenshot({path:'../results/arcade-ux/quick-mobile.png',fullPage:true});
   await round.getByRole('button',{name:'Next challenge →'}).click();
   await expect(page.getByRole('region',{name:'Quick Inside the Hidden Layers',exact:true})).toHaveAttribute('aria-busy','false');
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
@@ -93,7 +93,7 @@ test('free exploration loads all three real class-flipping ablation examples and
   for(const example of FLIP_EXAMPLES) {
     await page.getByRole('button',{name:`Load ${example.name} example`,exact:true}).click();
     await expect(page.getByTestId('current-prediction')).toHaveText(example.name);
-    const button=page.getByRole('button',{name:`Ablate channel ${example.channel}`,exact:true});
+    const button=page.getByRole('button',{name:`Switch off channel ${example.channel}`,exact:true});
     await expect(button).toBeEnabled();
     const response=page.waitForResponse(r=>r.url().endsWith('/api/intervene'));
     await button.click();const measured=await response;expect(measured.ok()).toBe(true);const result=await measured.json();
@@ -102,12 +102,12 @@ test('free exploration loads all three real class-flipping ablation examples and
     expect(result.request.interventions).toEqual([{type:'channel_ablation',layer:example.layer,channel:example.channel}]);
     expect(result.comparison.classification_flip).toBe(true);
     await expect(page.getByTestId('current-prediction')).toHaveText(result.modified.predicted_class);
-    await expect(page.getByTestId('outcome')).toContainText('Predicted class changed');
+    await expect(page.getByTestId('outcome')).toContainText('You changed its mind!');
     if(example.name==='cat') {
-      await page.getByRole('heading',{name:'Your toolkit',exact:true}).click();
-      await page.screenshot({path:'../results/powerups/free-class-flip.png',fullPage:true});
+      await page.getByRole('heading',{name:'Pull the plug.',exact:true}).click();
+      await page.screenshot({path:'../results/arcade-ux/free-class-flip.png',fullPage:true});
     }
-    await page.getByRole('button',{name:'Reset baseline'}).click();
+    await page.getByRole('button',{name:'Reset & try again'}).click();
     await expect(page.getByTestId('current-prediction')).toHaveText(result.baseline.predicted_class);
     await expect(page.getByTestId('current-margin')).toHaveText(result.baseline.target_logit_margin.toFixed(3));
   }

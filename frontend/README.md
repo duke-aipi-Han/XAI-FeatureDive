@@ -2,6 +2,8 @@
 
 Local React + TypeScript / Vite interface for the real CPU inference API.
 The default explorer opens on Feature Radar; Pixel hunt loads Eraser Vision.
+The large stage, context-sensitive tool dock, and prominent reset follow the
+[playground UX guide](../docs/arcade-ux.md).
 See the [hint power-up guide](../docs/hint-powerups.md).
 See the [quick-round guide](../docs/quick-rounds.md), [Phase 4 challenge guide](../docs/phase4-challenges.md) and [Phase 3 documentation](../docs/phase3-interface.md) for interaction details
 and browser acceptance evidence.
@@ -34,10 +36,11 @@ real model responses. A missing API, missing checkpoint, or rate limit produces
 an explicit error; no prediction fixtures are used as application fallbacks.
 
 `src/api.ts` contains the typed HTTP client; `types.ts` follows the Phase 2
-contract; `state.ts` handles immutable request/history transformations.
+contract; `state.ts` handles immutable intervention requests and source-pixel selections.
 `App.tsx` coordinates experiment state and layer views. `components/PixelCanvas.tsx`
 handles crisp rendering and source-coordinate selection, and `Results.tsx`
-shows measured comparisons, history, and export. CSS controls 2.5D presentation,
+shows measured comparisons and export. The app retains the original baseline
+and current result; history and undo are removed. CSS controls the large stage,
 responsive layout, focus styles, and reduced-motion behavior.
 `src/challenges/QuickRound.tsx` provides the default quick game: predict with a
 tap, run a paired test, and reveal the measured lesson. Reflection and evidence
@@ -48,7 +51,7 @@ hypotheses and measurements, dynamic feedback, completion tracking, and local
 JSON export. A/B assignments in the Shortcut Trap are randomized and revealed
 after the quick test, or after recorded identification/evidence in a longer investigation. Session progress
 is kept in browser memory and clears on reload. Hypotheses/reflections are never
-sent to the API. Browser acceptance artifacts are written to `results/powerups/`. The browser
+sent to the API. Browser acceptance artifacts are written to `results/arcade-ux/`. The browser
 command builds automatically, then uses production preview 5174 and isolated API
 8001. Normal development stays on 5173/8000. The suite paces API requests to respect the normal
 rate limit; a full run may pause between tests. `src/examples.ts` defines three

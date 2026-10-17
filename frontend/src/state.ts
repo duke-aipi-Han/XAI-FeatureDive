@@ -6,7 +6,7 @@ export function withIntervention(request: ExperimentRequest, operation: Interven
     ? request.interventions.filter(item => item.type !== 'channel_ablation')
     : request.interventions;
   const interventions = [...previous, operation];
-  if (interventions.length > 16) throw new Error('This experiment has reached 16 interventions. Undo or reset to continue.');
+  if (interventions.length > 16) throw new Error('This experiment has reached 16 interventions. Reset to continue.');
   return { ...request, interventions };
 }
 export function branchHistory(history: HistoryEntry[], cursor: number, entry: HistoryEntry): HistoryEntry[] {

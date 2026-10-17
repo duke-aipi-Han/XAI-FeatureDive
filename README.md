@@ -8,7 +8,9 @@ The source of truth is [the implementation plan](FeatureDive-Codex-Implementatio
 
 ## Current status
 
-**Phase 4 is complete.** Three quick rounds now use **Guess → Test → Discover**:
+**Phase 4 is complete.** Free exploration now puts a large experiment stage,
+context-sensitive tools, and **Reset & try again** first. See the
+[playground UX guide](docs/arcade-ux.md). Three quick rounds now use **Guess → Test → Discover**:
 one prediction, one test, and an immediate measured lesson. Details and reflection
 are optional. Longer investigations remain under Teacher options alongside
 the React/TypeScript network explorer. The browser interface connects the
@@ -60,13 +62,14 @@ Open **http://127.0.0.1:5173/**. Choose a drawing and start an experiment, navig
 to Conv2, select a channel, ablate it, and compare actual before/after scores.
 Reset restores the original measured baseline. Input tools include saliency,
 drawing erasure, fixed-gray occlusion, and background swaps; all five layer
-views use real API responses. The browser supports undo/history restoration,
-explicit baseline changes, keyboard navigation, and JSON export.
+views use real API responses. History and undo have been removed to keep the
+loop short; reset restores the exact saved original result. Keyboard navigation
+and JSON export remain available.
 
 Choose **Guided challenges** for the quick versions of Find the Evidence, Inside
 the Hidden Layers, and The Shortcut Trap. See the [quick-round guide](docs/quick-rounds.md).
 Free exploration offers three **Load … example** presets with verified class-flipping
-channel ablations; load a drawing, then press the selected **Ablate channel** button.
+channel ablations; load a drawing, then press the selected **Switch off channel** button.
 Advanced model/background settings and detailed scores are collapsed by default. The [Phase 4 teacher guide and report](docs/phase4-challenges.md)
 provides a reproducible demo path, definitions, actual example results, and a
 student-friendly poster-board takeaway.

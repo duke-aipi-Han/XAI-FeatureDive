@@ -14,21 +14,17 @@ export default function HintPanel({ data, kind, selected, pristine, busy, onChan
     </button>;
   }
   return <section className="hint-panel" aria-label={kind==='feature'?'Feature Radar hints':'Eraser Vision hints'}>
-    <div className="hint-panel-title"><span>✦ {kind==='feature'?'FEATURE RADAR':'ERASER VISION'}</span><b>ESTIMATE · ORIGINAL INPUT</b></div>
+    <span className="hint-label">CLUE · ESTIMATE FROM ORIGINAL</span>
+    <p>{kind==='feature'?'These channels may':'These strokes may'} support <b>{data.experiment.request.target_class}</b>. {kind==='feature'?'Pick one, then switch it off.':'Erase the outlined patch. Does the answer change?'}</p>
     {kind==='feature'?<>
-      <p>Which feature might support <b>{data.experiment.request.target_class}</b>? Choose a clue, then switch that channel off.</p>
-      <div className="support-legend"><span><i className="weakens"/>likely weakens when removed</span><span><i className="strengthens"/>likely strengthens</span></div>
-      <div className="support-head"><span>Across Conv1 + Conv2</span><span>Estimated support</span></div>
       {data.channels.slice(0,3).map(row)}
       <details className="all-hints"><summary>All 24 channels</summary>{data.channels.slice(3).map(row)}</details>
-      {chosen&&<p className="chosen-hint" data-testid="selected-channel-hint">Selected {chosen.layer.toUpperCase()} / {chosen.channel}: estimated margin change <b>{signed(chosen.estimated_margin_change,3)}</b>. Original mean activity {chosen.mean_activation.toFixed(4)}.</p>}
+      {chosen&&<p className="chosen-hint" data-testid="selected-channel-hint">Predicted margin change <b>{signed(chosen.estimated_margin_change,3)}</b></p>}
     </>:<>
-      <p>The overlay estimates which strokes support <b>{data.experiment.request.target_class}</b>. Coral suggests erasing may weaken it; blue suggests it may strengthen it.</p>
-      <div className="support-legend"><span><i className="weakens"/>likely weakens</span><span><i className="strengthens"/>likely strengthens</span></div>
-      {data.suggested_patch?<div className="suggested-erase"><span>4 × 4 clue at ({data.suggested_patch.rectangle.x},{data.suggested_patch.rectangle.y})</span><b data-testid="erase-hint-estimate">Estimated margin change {signed(data.suggested_patch.estimated_margin_change,3)}</b><button disabled={busy||!pristine} onClick={onErase}>Erase hinted patch</button></div>:<p>No positive weakening clue for this input. You can still investigate with Pixel Eraser.</p>}
-      <p className="hint-scale">Signed overlay uses a shared −max → +max scale for this image. The outlined patch is a suggestion; no pixels change until you test.</p>
+      <div className="support-legend"><span><i className="weakens"/>weaken</span><span><i className="strengthens"/>strengthen</span></div>
+      {data.suggested_patch?<div className="suggested-erase"><small>4 × 4 at ({data.suggested_patch.rectangle.x},{data.suggested_patch.rectangle.y})</small><span data-testid="erase-hint-estimate">Predicted margin change <b>{signed(data.suggested_patch.estimated_margin_change,3)}</b></span><button disabled={busy||!pristine} onClick={onErase}>Erase hinted patch</button></div>:<p>No weakening clue here. Try your own patch.</p>}
     </>}
-    {!pristine&&<p className="hint-reset">These clues describe the original input. Reset baseline before testing another clue independently.</p>}
-    <details className="hint-explanation"><summary>How does this power-up work?</summary><p>A first-order gradient estimate predicts a change in the selected class score minus the strongest competing score (its margin). Channels use activation × margin gradient. Eraser Vision uses the actual RGB change toward the original background. The hint uses no trial ablations. Full removal can behave differently; inspect the observed effect afterward.</p></details>
+    {!pristine&&<p className="hint-reset">Reset baseline to test a fresh clue.</p>}
+    <details className="hint-explanation"><summary>How does this power-up work?</summary><p>Clues estimate removal’s effect on the target’s logit margin using original-input gradients. Channels use activation × gradient; pixels use the change back to background. Coral suggests weakening, blue strengthening. The model has not tested these removals. Full removal may behave differently.</p><p>Channel rankings span both layers. Activity alone is not importance. Pixel color intensity is scaled to this image’s largest absolute estimate.</p></details>
   </section>;
 }

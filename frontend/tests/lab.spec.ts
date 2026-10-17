@@ -18,10 +18,10 @@ test('Phase 3 gate: drawing → Conv2 → channel → ablate → real scores →
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   await loaded(page);
   const baseline = await sample(page, 'airplane:142997');
-  await page.getByRole('button', { name: '03 CONV2 16 feature maps' }).click();
+  await page.getByRole('button', { name: 'Layer 2 · CONV2 · 16 feature maps' }).click();
   await page.getByRole('button', { name: 'Select channel 1', exact: true }).click();
   const response = page.waitForResponse(response => response.url().endsWith('/api/intervene'));
-  await page.getByRole('button', { name: 'Ablate channel 1', exact: true }).click();
+  await page.getByRole('button', { name: 'Switch off channel 1', exact: true }).click();
   const modified = await (await response).json() as ExperimentResult;
   expect(modified.request.interventions).toEqual([{ type: 'channel_ablation', layer: 'conv2', channel: 1 }]);
   expect(modified.baseline.logits).toEqual(baseline.baseline.logits);
@@ -35,17 +35,18 @@ test('Phase 3 gate: drawing → Conv2 → channel → ablate → real scores →
   await page.getByRole('button', { name: 'Current', exact: true }).click();
   await page.getByRole('heading', { name: 'Look deeper.' }).click();
   expect(await page.locator('.skip-link').evaluate(element => getComputedStyle(element).top)).toBe('-100px');
-  await page.screenshot({ path: '../results/powerups/conv2-ablation.png', fullPage: true });
-  await writeFile('../results/powerups/gate-experiment.json', JSON.stringify({ baseline, modified }, null, 2) + '\n');
-  await page.getByRole('button', { name: 'Reset baseline' }).click();
+  await page.screenshot({ path: '../results/arcade-ux/conv2-ablation.png', fullPage: true });
+  await writeFile('../results/arcade-ux/gate-experiment.json', JSON.stringify({ baseline, modified }, null, 2) + '\n');
+  await page.getByRole('button', { name: 'Reset & try again' }).click();
   await expect(page.getByTestId('current-margin')).toHaveText(baseline.modified.target_logit_margin.toFixed(3));
   await expect(page.getByTestId('logit-airplane')).toHaveText(baseline.modified.logits[2].toFixed(3));
   await expect(page.getByTestId('margin-change')).toHaveText('+0.000 logit units');
   expect(errors).toEqual([]);
 });
 
-test('input tools use gradients and real selected pixels; undo restores earlier state', async ({ page }) => {
-  await loaded(page); await sample(page, 'fish:2617');
+test('input tools use gradients and real selected pixels; reset restores the original state', async ({ page }) => {
+  await loaded(page); const original = await sample(page, 'fish:2617');
+  await page.getByText('More drawing tools',{exact:true}).click();
   const saliency = page.waitForResponse(response => response.url().endsWith('/api/saliency'));
   await page.getByRole('button', { name: /Saliency Scope/ }).click();
   const attribution = await (await saliency).json();
@@ -62,8 +63,8 @@ test('input tools use gradients and real selected pixels; undo restores earlier 
   await expect(page.getByTestId('current-margin')).toHaveText(result.modified.target_logit_margin.toFixed(3));
   const swap = page.waitForResponse(response => response.url().endsWith('/api/intervene'));
   await page.getByRole('button', { name: 'Change background to yellow' }).click(); await swap;
-  await page.getByRole('button', { name: 'Undo', exact: false }).click();
-  await expect(page.getByTestId('current-margin')).toHaveText(result.modified.target_logit_margin.toFixed(3));
+  await page.getByRole('button', { name: 'Reset & try again' }).click();
+  await expect(page.getByTestId('current-margin')).toHaveText(original.modified.target_logit_margin.toFixed(3));
   await page.getByRole('button', { name: /Pixel Eraser/ }).click();
   const erased = page.waitForResponse(response => response.url().endsWith('/api/intervene'));
   await canvas.click({ position: { x: bounds.width * 16.5 / 28, y: bounds.height * 16.5 / 28 } });
@@ -87,36 +88,36 @@ test('a model or target draft does not silently replace the active baseline', as
 
 test('dense/output views, keyboard navigation, and download work with measured data', async ({ page }) => {
   await loaded(page);
-  await page.getByRole('button', { name: '04 DENSE 32 neurons' }).click();
+  await page.getByRole('button', { name: 'Hidden · DENSE · 32 neurons' }).click();
   await expect(page.locator('.neuron')).toHaveCount(32);
-  await page.getByRole('button', { name: '05 OUTPUT 3 classes' }).click();
+  await page.getByRole('button', { name: 'Answer · OUTPUT · 3 classes' }).click();
   await expect(page.getByRole('heading', { name: 'Read the decision.' })).toBeVisible();
   const download = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Export experiment JSON' }).click();
   expect((await download).suggestedFilename()).toMatch(/^featuredive-.*\.json$/);
   await page.locator('h1').click(); await page.keyboard.press('ArrowLeft');
   await expect(page.getByRole('heading', { name: 'The hidden representation.' })).toBeVisible();
-  await page.getByRole('button', { name: '02 CONV1 8 feature maps' }).click();
+  await page.getByRole('button', { name: 'Layer 1 · CONV1 · 8 feature maps' }).click();
   await page.keyboard.press('ArrowRight');
   await expect(page.getByRole('heading', { name: 'Look deeper.' })).toBeVisible();
 });
 
 test('failed intervention retains the current baseline and permits retry', async ({ page }) => {
-  await loaded(page); await page.getByRole('button',{name:'01 INPUT Pixels'}).click(); const margin = await page.getByTestId('current-margin').textContent();
+  await loaded(page); await page.getByRole('button',{name:'Drawing · INPUT · Pixels'}).click(); const margin = await page.getByTestId('current-margin').textContent();
   await page.route('**/api/intervene', route => route.fulfill({ status: 503, contentType: 'application/json', body: JSON.stringify({ detail: 'Temporary inference failure' }) }));
   await page.getByRole('button', { name: 'Change background to yellow' }).click();
   await expect(page.getByRole('alert')).toContainText('Temporary inference failure');
   await expect(page.getByTestId('current-margin')).toHaveText(margin!);
   await page.unroute('**/api/intervene');
   await page.getByRole('button', { name: 'Change background to yellow' }).click();
-  await expect(page.getByRole('button', { name: 'Undo', exact: false })).toBeEnabled();
+  await expect(page.getByRole('button', { name: 'Reset & try again' })).toBeEnabled();
 });
 
 test('mobile layout fits and startup failures have a useful retry', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await loaded(page);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  await page.screenshot({ path: '../results/powerups/mobile-input.png', fullPage: true });
+  await page.screenshot({ path: '../results/arcade-ux/mobile-input.png', fullPage: true });
   await page.route('**/api/ready', route => route.fulfill({ status: 503, contentType: 'application/json', body: JSON.stringify({ detail: 'Models unavailable' }) }));
   await page.reload(); await expect(page.getByRole('alert')).toContainText('Models unavailable');
   await page.unroute('**/api/ready');
